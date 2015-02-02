@@ -18,7 +18,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface ImageCaptureViewController () <UIScrollViewDelegate, UITextFieldDelegate, UIPickerViewDelegate, PickerTableViewControllerDelegate>
+@interface ImageCaptureViewController () <UITextFieldDelegate, PickerTableViewControllerDelegate>
 
 // Storyboard Outlets
 // Before taking
@@ -500,12 +500,6 @@
     self.locked = NO;
 }
 
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    [self.keyboard resignFirstResponder];
-}
-
 #pragma mark - VC Lifecycle
 
 - (void)dealloc {
@@ -526,7 +520,6 @@
     
     // Delegate
     self.keyboard.delegate = self;
-    self.scrollView.delegate = self;
     
     // Check for authorization
     [self checkDeviceAuthorizationStatus];
