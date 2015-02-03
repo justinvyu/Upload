@@ -55,7 +55,6 @@
 @property (nonatomic) BOOL flashOn;
 @property (nonatomic) BOOL captureModeOn;
 @property (nonatomic) BOOL locked;
-@property (strong, nonatomic) CLLocation *currentLocation;
 
 // Background Task ID
 @property (nonatomic) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
@@ -85,13 +84,6 @@
     NSString *caption = self.keyboard.text;
     NSString *tag = self.tag;
     
-    /*
-    PFGeoPoint *coordinate = nil;
-    if (self.currentLocation) {
-        coordinate = [PFGeoPoint geoPointWithLatitude:self.currentLocation.coordinate.latitude
-                                                        longitude:self.currentLocation.coordinate.longitude];
-    }
-     */
     if (!self.imageFile) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                         message:@"Make sure that you have taken a photo"
@@ -345,8 +337,7 @@
                                      
                 
                 */
-                
-                //[self startSingleLocationRequest];
+
                 [self changeMode];
             }
         }];
@@ -395,56 +386,6 @@
 }
 
 #pragma mark - Animation
-
-/*
-#pragma mark - Get User's current location
-
-- (void)startSingleLocationRequest {
-    INTULocationManager *locationManager = [INTULocationManager sharedInstance]; // Get a singleton of the class
-    NSTimeInterval timeout = 10.0;
-    self.locationRequestID = [locationManager requestLocationWithDesiredAccuracy:INTULocationAccuracyBlock
-                                                                         timeout:timeout
-                               block:^(CLLocation *currentLocation, INTULocationAccuracy achievedAccuracy, INTULocationStatus status) {
-                                   if (status == INTULocationStatusSuccess) {
-                                       // achievedAccuracy is at least the desired accuracy (potentially better)
-                                       self.currentLocation = currentLocation;
-                                   } else if (status == INTULocationStatusTimedOut) {
-                                       
-                                   } else {
-                                       [[[UIAlertView alloc] initWithTitle:@"Location services (probably) not authorized!"
-                                                                  message:@"Upload needs permission to use location, please change privacy settings"
-                                                                 delegate:self
-                                                        cancelButtonTitle:@"OK"
-                                                        otherButtonTitles:nil] show];
-                                   }
-                               }];
-}
- */
-
-/*
-#pragma mark - Get User's current location
-
-- (void)getCurrentLocation {
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    self.locationManager.distanceFilter = kCLDistanceFilterNone;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
-        NSLog(@"V. 8.0 of higher");
-        [self.locationManager requestWhenInUseAuthorization];
-    }
-    
-    [self.locationManager startUpdatingLocation];
-}
-
-#pragma mark - CLLocationManagerDelegate
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    NSLog(@"inside");
-    [self.locationManager stopUpdatingLocation];
-}
- */
 
 #pragma mark - PickerTableViewControllerDelegate
 
@@ -618,22 +559,5 @@
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
-   
-
-/*
-#pragma mark - Test Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    if ([segue.identifier isEqualToString:@"Test"]) {
-        if ([segue.destinationViewController isKindOfClass:[TestViewController class]]) {
-            TestViewController *tvc = (TestViewController *)segue.destinationViewController;
-            tvc.image = self.resizedImage;
-        }
-    }
-}
-*/
 
 @end
