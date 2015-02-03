@@ -62,12 +62,6 @@
     // Configure the cell...
     cell.textLabel.text = [NSString stringWithFormat:@"%@", self.tags[indexPath.row]];
     
-    if ([self.presentingViewController isKindOfClass:[ImageCaptureViewController class]]) {
-        if ([((ImageCaptureViewController *)self.presentingViewController).tag isEqualToString:cell.textLabel.text]) {
-            [cell.accessoryView addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check"]]];
-        }
-    }
-    
     return cell;
 }
 

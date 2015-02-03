@@ -17,7 +17,6 @@
 		D0AAD42F1A79EDD900E77F3A /* ImageCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD42B1A79EDD900E77F3A /* ImageCaptureViewController.m */; };
 		D0AAD4331A79EDEA00E77F3A /* PickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD4321A79EDEA00E77F3A /* PickerTableViewController.m */; };
 		D0AAD43E1A79EDF500E77F3A /* UIImage+AlphaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD4351A79EDF500E77F3A /* UIImage+AlphaAdditions.m */; };
-		D0AAD43F1A79EDF500E77F3A /* UIImage+ImageEdit.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD4371A79EDF500E77F3A /* UIImage+ImageEdit.m */; };
 		D0AAD4401A79EDF500E77F3A /* UIImage+ResizeAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD4391A79EDF500E77F3A /* UIImage+ResizeAdditions.m */; };
 		D0AAD4411A79EDF500E77F3A /* UIImage+RoundedCornerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD43B1A79EDF500E77F3A /* UIImage+RoundedCornerAdditions.m */; };
 		D0AAD4421A79EDF500E77F3A /* UploadContstants.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD43D1A79EDF500E77F3A /* UploadContstants.m */; };
@@ -76,8 +75,6 @@
 		D0AAD4321A79EDEA00E77F3A /* PickerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerTableViewController.m; sourceTree = "<group>"; };
 		D0AAD4341A79EDF500E77F3A /* UIImage+AlphaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+AlphaAdditions.h"; sourceTree = "<group>"; };
 		D0AAD4351A79EDF500E77F3A /* UIImage+AlphaAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+AlphaAdditions.m"; sourceTree = "<group>"; };
-		D0AAD4361A79EDF500E77F3A /* UIImage+ImageEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEdit.h"; sourceTree = "<group>"; };
-		D0AAD4371A79EDF500E77F3A /* UIImage+ImageEdit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEdit.m"; sourceTree = "<group>"; };
 		D0AAD4381A79EDF500E77F3A /* UIImage+ResizeAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ResizeAdditions.h"; sourceTree = "<group>"; };
 		D0AAD4391A79EDF500E77F3A /* UIImage+ResizeAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ResizeAdditions.m"; sourceTree = "<group>"; };
 		D0AAD43A1A79EDF500E77F3A /* UIImage+RoundedCornerAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCornerAdditions.h"; sourceTree = "<group>"; };
@@ -276,8 +273,6 @@
 			children = (
 				D0AAD4341A79EDF500E77F3A /* UIImage+AlphaAdditions.h */,
 				D0AAD4351A79EDF500E77F3A /* UIImage+AlphaAdditions.m */,
-				D0AAD4361A79EDF500E77F3A /* UIImage+ImageEdit.h */,
-				D0AAD4371A79EDF500E77F3A /* UIImage+ImageEdit.m */,
 				D0AAD4381A79EDF500E77F3A /* UIImage+ResizeAdditions.h */,
 				D0AAD4391A79EDF500E77F3A /* UIImage+ResizeAdditions.m */,
 				D0AAD43A1A79EDF500E77F3A /* UIImage+RoundedCornerAdditions.h */,
@@ -391,7 +386,6 @@
 				D0AAD4331A79EDEA00E77F3A /* PickerTableViewController.m in Sources */,
 				D0AAD43E1A79EDF500E77F3A /* UIImage+AlphaAdditions.m in Sources */,
 				D0AAD3FE1A79ED9800E77F3A /* AppDelegate.m in Sources */,
-				D0AAD43F1A79EDF500E77F3A /* UIImage+ImageEdit.m in Sources */,
 				D0AAD4201A79EDB400E77F3A /* AVCamPreviewView.m in Sources */,
 				D0AAD4411A79EDF500E77F3A /* UIImage+RoundedCornerAdditions.m in Sources */,
 				D0AAD4401A79EDF500E77F3A /* UIImage+ResizeAdditions.m in Sources */,
@@ -592,6 +586,7 @@
 				D0AAD41A1A79ED9800E77F3A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D0AAD41B1A79ED9800E77F3A /* Build configuration list for PBXNativeTarget "Uploadv2Tests" */ = {
 			isa = XCConfigurationList;
@@ -600,6 +595,7 @@
 				D0AAD41D1A79ED9800E77F3A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -8,7 +8,6 @@
 
 #import "ImageCaptureViewController.h"
 #import "AVCamPreviewView.h"
-#import "ImageEditViewController.h"
 #import "UIImage+ResizeAdditions.h"
 #import "UploadConstants.h"
 #import "PickerTableViewController.h"
@@ -49,6 +48,7 @@
 
 // For upload
 @property (strong, nonatomic) PFFile *imageFile;
+@property (strong, nonatomic) PFGeoPoint *coordinate;
 
 // Utils
 @property (nonatomic) BOOL deviceAuthorized;
@@ -84,11 +84,14 @@
     
     NSString *caption = self.keyboard.text;
     NSString *tag = self.tag;
+    
+    /*
     PFGeoPoint *coordinate = nil;
     if (self.currentLocation) {
         coordinate = [PFGeoPoint geoPointWithLatitude:self.currentLocation.coordinate.latitude
                                                         longitude:self.currentLocation.coordinate.longitude];
     }
+     */
     if (!self.imageFile) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                         message:@"Make sure that you have taken a photo"
@@ -113,7 +116,7 @@
                                               otherButtonTitles:nil];
         [alert show];
         return;
-    } else if (!coordinate) {
+    } else if (!self.coordinate) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                         message:@"No location???"
                                                        delegate:nil
@@ -127,7 +130,7 @@
     [photo setObject:self.imageFile forKey:kUploadPhotoKey];
     [photo setObject:caption forKey:kUploadCaptionKey];
     [photo setObject:tag forKey:kUploadTagKey];
-    [photo setObject:coordinate forKey:kUploadReadableGeolocationKey];
+    [photo setObject:self.coordinate forKey:kUploadReadableGeolocationKey];
     
     self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
@@ -319,6 +322,14 @@
                 
                 self.stillImage = captureImage;
                 
+                [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                    if (error) {
+                        NSLog(@"Unable to get Location");
+                    } else {
+                        self.coordinate = geoPoint;
+                        NSLog(@"Location is Set");
+                    }
+                }];
                 
                 /*
                 CGFloat w_scaleFactor = captureImage.size.width / self.view.bounds.size.width;
@@ -335,7 +346,7 @@
                 
                 */
                 
-                [self startSingleLocationRequest];
+                //[self startSingleLocationRequest];
                 [self changeMode];
             }
         }];
@@ -385,7 +396,7 @@
 
 #pragma mark - Animation
 
-
+/*
 #pragma mark - Get User's current location
 
 - (void)startSingleLocationRequest {
@@ -405,22 +416,10 @@
                                                                  delegate:self
                                                         cancelButtonTitle:@"OK"
                                                         otherButtonTitles:nil] show];
-                                       /*
-                                       if (status == INTULocationStatusServicesNotDetermined) {
-                                        
-                                       } else if (status == INTULocationStatusServicesRestricted) {
-                                           
-                                       } else if (status == INTULocationStatusServicesDisabled) {
-                                           
-                                       } else if (status == INTULocationStatusServicesDenied) {
-                                           
-                                       } else {
-                                           
-                                       }
-                                        */
                                    }
                                }];
 }
+ */
 
 /*
 #pragma mark - Get User's current location
@@ -590,7 +589,6 @@
             [self setStillImageOutput:stillImageOutput];
         }
     });
-    
 }
 
 #pragma mark - Hide Status Bar
