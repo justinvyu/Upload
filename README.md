@@ -11,4 +11,4 @@ Features:
 Things To Finish:
 - Make UI better, fit all devices
 - Better quality images
-- Geolocation sometimes doesn't work, try using parse getGeoPoint
+- Make a UI change that allows users to see what tag they have picked
