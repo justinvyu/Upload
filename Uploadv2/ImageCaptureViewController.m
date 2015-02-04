@@ -31,9 +31,10 @@
 // After taking
 @property (weak, nonatomic) IBOutlet UIImageView *imageDisplayView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UITextField *keyboard;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property (weak, nonatomic) IBOutlet UIButton *chooseTagButton;
+
+@property (strong, nonatomic) IBOutlet UITextField *textField;
 
 // AVCaptureSession Management
 @property (strong, nonatomic) AVCaptureSession *session;
@@ -81,7 +82,7 @@
 
 - (IBAction)touchNextButton:(id)sender {
     
-    NSString *caption = self.keyboard.text;
+    //NSString *caption = self.keyboard.text;
     NSString *tag = self.tag;
     
     if (!self.imageFile) {
@@ -92,7 +93,7 @@
                                               otherButtonTitles:nil];
         [alert show];
         return;
-    } else if (!caption || [caption isEqualToString:@""]) {
+    } /*else if (!caption || [caption isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                         message:@"Make sure that you have added a caption"
                                                        delegate:nil
@@ -100,7 +101,7 @@
                                               otherButtonTitles:nil];
         [alert show];
         return;
-    } else if (!tag || [tag isEqualToString:@""]) {
+    } */else if (!tag || [tag isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                         message:@"Make sure that you have added a tag"
                                                        delegate:nil
@@ -120,7 +121,7 @@
     
     PFObject *photo = [PFObject objectWithClassName:kUploadClassKey];
     [photo setObject:self.imageFile forKey:kUploadPhotoKey];
-    [photo setObject:caption forKey:kUploadCaptionKey];
+    //[photo setObject:caption forKey:kUploadCaptionKey];
     [photo setObject:tag forKey:kUploadTagKey];
     [photo setObject:self.coordinate forKey:kUploadReadableGeolocationKey];
     
@@ -197,7 +198,11 @@
 
 - (IBAction)touchCancelButton:(id)sender {
     // Cancel any ongoing background actions
-    [self changeMode];
+    if (self.stillImage) {
+        [self changeMode];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 #pragma mark - Changing Mode
@@ -205,8 +210,7 @@
 - (void)changeMode {
     if (self.captureModeOn) {
         self.nextButton.hidden = NO;
-        self.keyboard.hidden = NO;
-        self.cancelButton.hidden = NO;
+        //self.keyboard.hidden = NO;
         
         self.chooseTagButton.hidden = NO;
         self.flashButton.enabled = NO;
@@ -214,22 +218,21 @@
         self.previewView.hidden = YES;
         
         self.captureModeOn = NO;
-        
+        /*
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-        
+        */
         [self shouldUploadImage];
     } else {
         self.nextButton.hidden = YES;
-        self.keyboard.hidden = YES;
-        self.cancelButton.hidden = YES;
+        //self.keyboard.hidden = YES;
         
         self.chooseTagButton.hidden = YES;
         self.flashButton.enabled = YES;
         self.captureButton.hidden = NO;
         self.previewView.hidden = NO;
         
-        self.keyboard.text = @"";
+        //self.keyboard.text = @"";
         self.tag = nil;
         self.imageDisplayView.image = nil;
         self.stillImage = nil;
@@ -237,9 +240,10 @@
         self.resizedImage = nil;
         
         self.captureModeOn = YES;
-        
+        /*
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+         */
     }
 }
 
@@ -293,7 +297,8 @@
 {
     dispatch_async([self sessionQueue], ^{
         // Update the orientation on the still image output video connection before capturing.
-        [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
+        [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo]
+         setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
         
         // Flash set to Auto for Still Capture
         [ImageCaptureViewController setFlashMode:self.flashOn ? AVCaptureFlashModeOn : AVCaptureFlashModeOff
@@ -301,7 +306,8 @@
         
         // Capture a still image.
         // To do: animate the capture
-        [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+        [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo]
+                                                             completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
             
             if (imageDataSampleBuffer)
             {
@@ -409,10 +415,11 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     //[self touchNextButton:textField];
+    [self checkTextField];
     [textField resignFirstResponder];
     return YES;
 }
-
+/*
 - (void)keyboardWillShow:(NSNotification *)note {
     if (!self.locked) {
         CGRect keyboardFrameEnd = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -439,6 +446,31 @@
     }];
     self.locked = NO;
 }
+ */
+
+- (void)handleTap:(UITapGestureRecognizer *)gesture {
+    if (gesture.state == UIGestureRecognizerStateEnded) {
+        NSLog(@"Tapped");
+        [self checkTextField];
+    }
+}
+
+- (void)checkTextField {
+    if (self.stillImage) {
+        if (self.textField.hidden) {
+            self.textField.hidden = NO;
+            [self.textField becomeFirstResponder];
+        } else if (!self.textField.hidden) {
+            if (!self.textField.text || [self.textField.text isEqualToString:@""]) {
+                [self.textField resignFirstResponder];
+                self.textField.hidden = YES;
+
+            } else {
+                [self.textField resignFirstResponder];
+            }
+        }
+    }
+}
 
 #pragma mark - VC Lifecycle
 
@@ -453,31 +485,32 @@
     
     // Create AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
-    [self setSession:session];
+    self.session = session;
+
+    self.previewView.session = session;
     
-    // Setup preview view
-    [[self previewView] setSession:session];
+    self.textField.delegate = self;
+    self.textField.hidden = YES;
     
-    // Delegate
-    self.keyboard.delegate = self;
-    
-    // Check for authorization
     [self checkDeviceAuthorizationStatus];
-    
-    // Hide all unneccessary buttons / views
+
     self.nextButton.hidden = YES;
-    self.cancelButton.hidden = YES;
-    self.keyboard.hidden = YES;
+    //self.cancelButton.hidden = YES;
     
     self.captureModeOn = YES;
     self.flashOn = NO;
     self.locked = NO;
-    
-    // Tag Button
+
     CALayer *layer = [self.chooseTagButton layer];
     [layer setMasksToBounds:YES];
     [layer setCornerRadius:5.0f];
     self.chooseTagButton.hidden = YES;
+    
+    self.imageDisplayView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                          action:@selector(handleTap:)];
+    [self.imageDisplayView addGestureRecognizer:tap];
+    
     
     /* Masking
     // Create a mask layer and the frame to determine what will be visible in the view.
