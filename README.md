@@ -6,6 +6,7 @@ Photo Uploading Module
 List of Things To Do:
 
 For UI:
+
 1. Choose tag within the same screen or other smarter/smooth ways to allow user to choose the tag (see whether you can put this into work: https://github.com/bestwnh/IGLDropDownMenu );
 
 ~~2. the first screen also need a X button to for user to cancel taking pictures;~~
