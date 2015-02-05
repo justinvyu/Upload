@@ -5,6 +5,7 @@ Photo Uploading Module
 
 List of Things To Do:
 
+For UI:
 1. Choose tag within the same screen or other smarter/smooth ways to allow user to choose the tag (see whether you can put this into work: https://github.com/bestwnh/IGLDropDownMenu );
 
 ~~2. the first screen also need a X button to for user to cancel taking pictures;~~
@@ -13,9 +14,9 @@ List of Things To Do:
 
 For Data:
 
-Collect all the Foursquare, YELP, Google Places categories data;
+1. Collect all the Foursquare, YELP, Google Places categories data;
 
-Create a separate events category section from the above data, also Google some result about what possibly type of events it could be when you can take a picture to capture it.
+2. Create a separate events category section from the above data, also Google some result about what possibly type of events it could be when you can take a picture to capture it.
 
 Features:
 - Taking a square image
