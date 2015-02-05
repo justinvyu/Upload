@@ -32,7 +32,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageDisplayView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
-@property (weak, nonatomic) IBOutlet UIButton *chooseTagButton;
+//@property (weak, nonatomic) IBOutlet UIButton *chooseTagButton;
 
 @property (strong, nonatomic) IBOutlet UITextField *textField;
 
@@ -70,6 +70,7 @@
 
 #pragma mark - Actions
 
+/*
 - (IBAction)chooseTag:(id)sender {
     UINavigationController *navigationController = (UINavigationController *)[self.storyboard instantiateViewControllerWithIdentifier:@"TableNVC"];
     PickerTableViewController *tableViewController = (PickerTableViewController *)[[navigationController viewControllers] objectAtIndex:0];
@@ -79,11 +80,12 @@
     tableViewController.tags = self.tags;
     [self presentViewController:navigationController animated:YES completion:nil];
 }
+ */
 
 - (IBAction)touchNextButton:(id)sender {
     
-    //NSString *caption = self.keyboard.text;
-    NSString *tag = self.tag;
+    NSString *caption = self.textField.text;
+    //NSString *tag = self.tag;
     
     if (!self.imageFile) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
@@ -93,7 +95,7 @@
                                               otherButtonTitles:nil];
         [alert show];
         return;
-    } /*else if (!caption || [caption isEqualToString:@""]) {
+    } else if (!caption || [caption isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                         message:@"Make sure that you have added a caption"
                                                        delegate:nil
@@ -101,7 +103,7 @@
                                               otherButtonTitles:nil];
         [alert show];
         return;
-    } */else if (!tag || [tag isEqualToString:@""]) {
+    } /*else if (!tag || [tag isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                         message:@"Make sure that you have added a tag"
                                                        delegate:nil
@@ -109,7 +111,7 @@
                                               otherButtonTitles:nil];
         [alert show];
         return;
-    } else if (!self.coordinate) {
+    }*/ else if (!self.coordinate) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                         message:@"No location???"
                                                        delegate:nil
@@ -121,8 +123,8 @@
     
     PFObject *photo = [PFObject objectWithClassName:kUploadClassKey];
     [photo setObject:self.imageFile forKey:kUploadPhotoKey];
-    //[photo setObject:caption forKey:kUploadCaptionKey];
-    [photo setObject:tag forKey:kUploadTagKey];
+    [photo setObject:caption forKey:kUploadCaptionKey];
+    //[photo setObject:tag forKey:kUploadTagKey];
     [photo setObject:self.coordinate forKey:kUploadReadableGeolocationKey];
     
     self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
@@ -198,7 +200,7 @@
 
 - (IBAction)touchCancelButton:(id)sender {
     // Cancel any ongoing background actions
-    if (self.stillImage) {
+    if (!self.captureModeOn) {
         [self changeMode];
     } else {
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -212,7 +214,7 @@
         self.nextButton.hidden = NO;
         //self.keyboard.hidden = NO;
         
-        self.chooseTagButton.hidden = NO;
+        //self.chooseTagButton.hidden = NO;
         self.flashButton.enabled = NO;
         self.captureButton.hidden = YES;
         self.previewView.hidden = YES;
@@ -225,21 +227,24 @@
         [self shouldUploadImage];
     } else {
         self.nextButton.hidden = YES;
-        //self.keyboard.hidden = YES;
         
-        self.chooseTagButton.hidden = YES;
+        //self.chooseTagButton.hidden = YES;
         self.flashButton.enabled = YES;
         self.captureButton.hidden = NO;
         self.previewView.hidden = NO;
         
-        //self.keyboard.text = @"";
+        self.textField.text = @"";
         self.tag = nil;
         self.imageDisplayView.image = nil;
         self.stillImage = nil;
         self.croppedImage = nil;
         self.resizedImage = nil;
         
+        self.textField.hidden = YES;
+        [self.textField resignFirstResponder];
+        
         self.captureModeOn = YES;
+
         /*
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
@@ -450,13 +455,12 @@
 
 - (void)handleTap:(UITapGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateEnded) {
-        NSLog(@"Tapped");
         [self checkTextField];
     }
 }
 
 - (void)checkTextField {
-    if (self.stillImage) {
+    if (!self.captureModeOn) {
         if (self.textField.hidden) {
             self.textField.hidden = NO;
             [self.textField becomeFirstResponder];
@@ -500,11 +504,13 @@
     self.captureModeOn = YES;
     self.flashOn = NO;
     self.locked = NO;
-
+    
+    /*
     CALayer *layer = [self.chooseTagButton layer];
     [layer setMasksToBounds:YES];
     [layer setCornerRadius:5.0f];
     self.chooseTagButton.hidden = YES;
+    */
     
     self.imageDisplayView.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
