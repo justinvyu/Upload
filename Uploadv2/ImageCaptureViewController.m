@@ -17,6 +17,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+#define kFoursquareClientID "CKYNLQRGVBTFIEZXN1AAQIZHLEJHP03YJPZVIHW2XY323KUV"
+#define kFoursquareSecret "XLEOBERHEPFCID4CIZ2543F1RO04MGU0IJ1VVRKHIC4ZCHUE"
+
 @interface ImageCaptureViewController () <UITextFieldDelegate, PickerTableViewControllerDelegate>
 
 // Storyboard Outlets
