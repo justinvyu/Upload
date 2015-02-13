@@ -421,12 +421,7 @@
     return (newLength > 140) ? NO : YES; // Do not allow the user to type another character if the char count is > 140
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    //[self touchNextButton:textField];
-    [self checkTextField];
-    [textField resignFirstResponder];
-    return YES;
-}
+
 /*
 - (void)keyboardWillShow:(NSNotification *)note {
     if (!self.locked) {

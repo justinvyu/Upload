@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-GKImagePicker.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-ISO8601DateFormatterValueTransformer.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -52,47 +57,52 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>013245D973B60465DCFDB422</key>
+		<key>0528B18FC69966D1C4DF02AC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0B7794A5E215DFD641B08381</key>
+		<key>09BB6442FB337AB37E8E1187</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1FB19CA974D8877D7D8A33C6</key>
+		<key>1F571C4C9E7DD3E9E77FFFFD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>322F4513658CA2F51FF608CE</key>
+		<key>34835344B71857162AE0766F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5CF465E557326D87B18CC696</key>
+		<key>5A24ED22646D8578A45C2054</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5EBE819B040600F5400DDF83</key>
+		<key>60B980ECE4E48C4D0D67FC4B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>ACA82184F041118935DB7E7D</key>
+		<key>6FB33871F5B6C6E161F9066C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F29E40FD5C2614A2391415E8</key>
+		<key>7A7E161439592492E5DEEF7A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>FF9A4F0E71A80ABF15F1297D</key>
+		<key>B2C989EEA62C30E7CE11BA3A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E3B69A24D543C2DA8AA91292</key>
 		<dict>
 			<key>primary</key>
 			<true/>

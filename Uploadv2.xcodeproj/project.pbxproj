@@ -328,6 +328,7 @@
 				TargetAttributes = {
 					D0AAD3F41A79ED9800E77F3A = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = UWSMUE6KT8;
 					};
 					D0AAD40D1A79ED9800E77F3A = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -539,6 +540,8 @@
 			baseConfigurationReference = 19325D5CC0459E5089FAE87A /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/Justin/Downloads/parse-library-1.6.2",
@@ -547,6 +550,7 @@
 				INFOPLIST_FILE = Uploadv2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -555,6 +559,8 @@
 			baseConfigurationReference = 1322D604B5E2B66C4236B403 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/Justin/Downloads/parse-library-1.6.2",
@@ -563,6 +569,7 @@
 				INFOPLIST_FILE = Uploadv2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
