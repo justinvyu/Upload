@@ -38,6 +38,7 @@
 		D0AAD4791A79EF4900E77F3A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AAD4781A79EF4900E77F3A /* libz.dylib */; };
 		D0AAD47B1A79EF5200E77F3A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AAD47A1A79EF5200E77F3A /* libsqlite3.dylib */; };
 		D0AAD47D1A79EFFC00E77F3A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0AAD47C1A79EFFC00E77F3A /* Images.xcassets */; };
+		D0B4B0921A9593AA006D24D2 /* IUPostPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B4B0911A9593AA006D24D2 /* IUPostPhotoViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +102,8 @@
 		D0AAD4781A79EF4900E77F3A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		D0AAD47A1A79EF5200E77F3A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		D0AAD47C1A79EFFC00E77F3A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		D0B4B0901A9593AA006D24D2 /* IUPostPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUPostPhotoViewController.h; sourceTree = "<group>"; };
+		D0B4B0911A9593AA006D24D2 /* IUPostPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IUPostPhotoViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +180,8 @@
 				D0AAD4801A79F13300E77F3A /* Delegate */,
 				D0AAD43C1A79EDF500E77F3A /* UploadConstants.h */,
 				D0AAD43D1A79EDF500E77F3A /* UploadContstants.m */,
+				D0AAD42A1A79EDD900E77F3A /* ImageCaptureViewController.h */,
+				D0AAD42B1A79EDD900E77F3A /* ImageCaptureViewController.m */,
 				D0AAD3F81A79ED9800E77F3A /* Supporting Files */,
 			);
 			path = Uploadv2;
@@ -185,6 +190,8 @@
 		D0AAD3F81A79ED9800E77F3A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D0AAD4311A79EDEA00E77F3A /* PickerTableViewController.h */,
+				D0AAD4321A79EDEA00E77F3A /* PickerTableViewController.m */,
 				D0AAD3F91A79ED9800E77F3A /* Info.plist */,
 				D0AAD3FA1A79ED9800E77F3A /* main.m */,
 			);
@@ -245,10 +252,8 @@
 				D07D3BB71A907A4F0064708A /* IUIndexViewController.m */,
 				D06AB8DE1A8E556B00E7701F /* IUUploadViewController.h */,
 				D06AB8DF1A8E556B00E7701F /* IUUploadViewController.m */,
-				D0AAD42A1A79EDD900E77F3A /* ImageCaptureViewController.h */,
-				D0AAD42B1A79EDD900E77F3A /* ImageCaptureViewController.m */,
-				D0AAD4311A79EDEA00E77F3A /* PickerTableViewController.h */,
-				D0AAD4321A79EDEA00E77F3A /* PickerTableViewController.m */,
+				D0B4B0901A9593AA006D24D2 /* IUPostPhotoViewController.h */,
+				D0B4B0911A9593AA006D24D2 /* IUPostPhotoViewController.m */,
 			);
 			name = "View Controller";
 			sourceTree = "<group>";
@@ -430,6 +435,7 @@
 				D0AAD4331A79EDEA00E77F3A /* PickerTableViewController.m in Sources */,
 				D0AAD43E1A79EDF500E77F3A /* UIImage+AlphaAdditions.m in Sources */,
 				D0AAD3FE1A79ED9800E77F3A /* AppDelegate.m in Sources */,
+				D0B4B0921A9593AA006D24D2 /* IUPostPhotoViewController.m in Sources */,
 				D0AAD4201A79EDB400E77F3A /* AVCamPreviewView.m in Sources */,
 				D0AAD4411A79EDF500E77F3A /* UIImage+RoundedCornerAdditions.m in Sources */,
 				D0AAD4401A79EDF500E77F3A /* UIImage+ResizeAdditions.m in Sources */,

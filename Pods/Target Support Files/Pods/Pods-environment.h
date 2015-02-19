@@ -18,17 +18,17 @@
 #define COCOAPODS_VERSION_MINOR_Bolts 1
 #define COCOAPODS_VERSION_PATCH_Bolts 3
 
-// GKImagePicker
-#define COCOAPODS_POD_AVAILABLE_GKImagePicker
-#define COCOAPODS_VERSION_MAJOR_GKImagePicker 0
-#define COCOAPODS_VERSION_MINOR_GKImagePicker 0
-#define COCOAPODS_VERSION_PATCH_GKImagePicker 1
-
 // ISO8601DateFormatterValueTransformer
 #define COCOAPODS_POD_AVAILABLE_ISO8601DateFormatterValueTransformer
 #define COCOAPODS_VERSION_MAJOR_ISO8601DateFormatterValueTransformer 0
 #define COCOAPODS_VERSION_MINOR_ISO8601DateFormatterValueTransformer 6
 #define COCOAPODS_VERSION_PATCH_ISO8601DateFormatterValueTransformer 0
+
+// PKImagePicker
+#define COCOAPODS_POD_AVAILABLE_PKImagePicker
+#define COCOAPODS_VERSION_MAJOR_PKImagePicker 0
+#define COCOAPODS_VERSION_MINOR_PKImagePicker 0
+#define COCOAPODS_VERSION_PATCH_PKImagePicker 4
 
 // Parse
 #define COCOAPODS_POD_AVAILABLE_Parse
@@ -83,6 +83,12 @@
 #define COCOAPODS_VERSION_MAJOR_SOCKit 1
 #define COCOAPODS_VERSION_MINOR_SOCKit 1
 #define COCOAPODS_VERSION_PATCH_SOCKit 0
+
+// SZTextView
+#define COCOAPODS_POD_AVAILABLE_SZTextView
+#define COCOAPODS_VERSION_MAJOR_SZTextView 1
+#define COCOAPODS_VERSION_MINOR_SZTextView 1
+#define COCOAPODS_VERSION_PATCH_SZTextView 10
 
 // TransitionKit
 #define COCOAPODS_POD_AVAILABLE_TransitionKit

@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>PKImageBundle.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-AFNetworking.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -14,12 +19,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-GKImagePicker.xcscheme</key>
+		<key>Pods-ISO8601DateFormatterValueTransformer.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-ISO8601DateFormatterValueTransformer.xcscheme</key>
+		<key>Pods-PKImagePicker.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -44,6 +49,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-SZTextView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-TransitionKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -57,52 +67,62 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0528B18FC69966D1C4DF02AC</key>
+		<key>181F2934FAE467337A039E37</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>09BB6442FB337AB37E8E1187</key>
+		<key>187E14A915A3BA36E151C25E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1F571C4C9E7DD3E9E77FFFFD</key>
+		<key>1DF9C8FF4F19B76FCC2D214F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>34835344B71857162AE0766F</key>
+		<key>564324B8F2C50DAF6B478226</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5A24ED22646D8578A45C2054</key>
+		<key>7D8DBB94F38B69C1003D00B3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>60B980ECE4E48C4D0D67FC4B</key>
+		<key>926A59657F1C0A290814CE42</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6FB33871F5B6C6E161F9066C</key>
+		<key>B0B52FE8AC6F20F160D23571</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7A7E161439592492E5DEEF7A</key>
+		<key>C19F613EE330346640B0D8C6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B2C989EEA62C30E7CE11BA3A</key>
+		<key>C88CA55C1B900E5DF6B02C17</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E3B69A24D543C2DA8AA91292</key>
+		<key>CF6EA793F8D0E16777369B02</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DF94C7A1DC25406F634AEA21</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E0593C485C06C0ABC561CEEB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
