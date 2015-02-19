@@ -65,6 +65,78 @@
 
 @implementation IUUploadViewController
 
+#pragma mark - Touch Selectors
+
+- (void)takeStillImage {
+    dispatch_async([self sessionQueue], ^{
+        // Update the orientation on the still image output video connection before capturing.
+        [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo]
+         setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
+        
+        // Flash set to Auto for Still Capture
+        [IUUploadViewController setFlashMode:self.flashOn ? AVCaptureFlashModeOn : AVCaptureFlashModeOff
+                                       forDevice:[[self videoDeviceInput] device]];
+        
+        // Capture a still image.
+        // To do: animate the capture
+        [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo]
+                                                             completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+             if (imageDataSampleBuffer)
+             {
+                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+                 // send over image and present edit vc
+                 UIImage *captureImage = [UIImage imageWithData:imageData];
+                 
+                 if (!captureImage)
+                     return;
+                 
+                 self.stillImage = captureImage;
+                 
+                 [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                     if (error) {
+                         NSLog(@"Unable to get Location");
+                     } else {
+                         self.coordinate = geoPoint;
+                         NSLog(@"Location is Set");
+                     }
+                 }];
+                 
+                 /*
+                  CGFloat w_scaleFactor = captureImage.size.width / self.view.bounds.size.width;
+                  CGFloat h_scaleFactor = captureImage.size.height / self.view.bounds.size.height;
+                  
+                  NSLog(@"%f, %f", w_scaleFactor, h_scaleFactor);
+                  
+                  self.resizedImage = [[captureImage croppedImage:CGRectMake(0,
+                  self.headerView.bounds.size.height * w_scaleFactor,
+                  self.view.bounds.size.width * w_scaleFactor,
+                  self.view.bounds.size.width * w_scaleFactor)]
+                  resizedImage:CGSizeMake(kImageHeight, kImageHeight) interpolationQuality:kCGInterpolationHigh];
+                  
+                  */
+                 
+                 [self changeMode];
+             }
+         }];
+    });
+}
+
+- (void)touchCancelButton {
+    // Cancel any ongoing background actions
+    if (!self.captureModeOn) {
+        [self changeMode];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (void)toggleFlash {
+    self.flashOn = self.flashOn ? NO : YES;
+    [self.flashButton setImage:[UIImage imageNamed:self.flashOn ? @"flashOn" : @"flashOff"] forState:UIControlStateNormal];
+}
+
+#pragma mark - Init
+
 - (instancetype)init {
     self = [super init];
     
@@ -74,7 +146,6 @@
         [self setupUI];
         
         self.nextButton.hidden = YES;
-        //self.cancelButton.hidden = YES;
         
         self.captureModeOn = YES;
         self.flashOn = NO;
@@ -161,14 +232,48 @@
     
     [self checkDeviceAuthorizationStatus];
     
-    // Header & Footer View
+    // Image Display View
+    
+    self.imageDisplayView = [[UIImageView alloc] initWithImage:nil];
+    self.imageDisplayView.frame = self.scrollView.frame;
+    self.imageDisplayView.center = self.scrollView.center;
+    
+    [self.scrollView addSubview:self.imageDisplayView];
+    
+    // Header View and Subviews
     
     self.headerView = [[UIView alloc] init];
     self.headerView.frame = CGRectMake(0, 0, self.scrollView.bounds.size.width, 50);
-    self.headerView.backgroundColor = [UIColor colorWithWhite:0.1f alpha:1.0f];
+    self.headerView.backgroundColor = [UIColor colorWithWhite:0.1f alpha:0.8f];
     //self.headerView.alpha = 0.8f;
 
     [self.scrollView addSubview:self.headerView];
+    
+    self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.cancelButton setTitle:@"✕" forState:UIControlStateNormal];
+    self.cancelButton.titleLabel.textColor = [UIColor whiteColor];
+    self.cancelButton.tintColor = [UIColor whiteColor];
+    self.cancelButton.titleLabel.font = [UIFont systemFontOfSize:25];
+    self.cancelButton.showsTouchWhenHighlighted = YES;
+    
+    self.cancelButton.frame = CGRectMake(self.headerView.frame.origin.x + 8, self.headerView.frame.origin.y + 8, 35, 35);
+    self.cancelButton.userInteractionEnabled = YES;
+    [self.cancelButton addTarget:self action:@selector(touchCancelButton) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.headerView addSubview:self.cancelButton];
+    
+    self.flashButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.flashButton setImage:[UIImage imageNamed:@"flashOff"] forState:UIControlStateNormal];
+    [self.flashButton addTarget:self action:@selector(toggleFlash) forControlEvents:UIControlEventTouchUpInside];
+    CGFloat flashButtonSideLength = 35;
+    self.flashButton.tintColor = [UIColor whiteColor];
+    self.flashButton.frame = CGRectMake(self.headerView.bounds.size.width - flashButtonSideLength - 8,
+                                        self.headerView.frame.origin.y + 8,
+                                        flashButtonSideLength, flashButtonSideLength);
+    self.flashButton.showsTouchWhenHighlighted = YES;
+    [self.headerView addSubview:self.flashButton];
+    
+    // Footer View and Subviews
     
     self.footerView = [[UIView alloc] init];
     self.footerView.frame = CGRectMake(0,
@@ -176,18 +281,93 @@
                                        self.scrollView.bounds.size.width,
                                        self.scrollView.bounds.size.height - (self.headerView.bounds.size.height + self.scrollView.bounds.size.width));
     
-    self.footerView.backgroundColor = [UIColor colorWithWhite:0.1f alpha:1.0f];
+    self.footerView.backgroundColor = [UIColor colorWithWhite:0.1f alpha:0.8f];
     [self.scrollView addSubview:self.footerView];
     
     self.captureButton = [UIButton buttonWithType:UIButtonTypeSystem];
     
+    [self.captureButton setBackgroundImage:[UIImage imageNamed:@"capture.png"] forState:UIControlStateNormal];
+    
+    CGFloat captureButtonSideLength = 90 > self.footerView.bounds.size.height ? self.footerView.bounds.size.height : 90;
+    
+    self.captureButton.frame = CGRectMake((self.footerView.bounds.size.width / 2) - (captureButtonSideLength / 2),
+                                          (self.footerView.bounds.size.height / 2) - (captureButtonSideLength / 2),
+                                          captureButtonSideLength, captureButtonSideLength);
+    self.captureButton.userInteractionEnabled = YES;
+    self.captureButton.showsTouchWhenHighlighted = YES;
+    [self.captureButton addTarget:self action:@selector(takeStillImage) forControlEvents:UIControlEventTouchUpInside];
     [self.footerView addSubview:self.captureButton];
-    [self.captureButton setBackgroundImage:[UIImage imageNamed:@"capture"] forState:UIControlStateNormal];
-    self.captureButton.center = self.scrollView.center;
-
+    
+    /*
+    self.nextButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    CGFloat nextButtonSideLength = 50 > self.footerView.bounds.size.height ? self.footerView.bounds.size.height : 50;
+    self.nextButton.frame = CGRectMake(self.footerView.bounds.size.width - (self.footerView.bounds.size.width / 2) - (nextButtonSideLength / 2),
+                                       (self.footerView.bounds.size.height / 2) - (nextButtonSideLength / 2),
+                                       nextButtonSideLength,
+                                       nextButtonSideLength);
+    [self.nextButton setImage:[UIImage imageNamed:@"next.png"] forState:(UIControlStateNormal | UIControlStateHighlighted)];
+    [self.footerView addSubview:self.nextButton];
+     */
 }
 
-#pragma mark - Get the video device for a specified media type
+#pragma mark - Change Mode
+
+- (void)changeMode {
+    if (self.captureModeOn) {
+        self.nextButton.hidden = NO;
+        //self.keyboard.hidden = NO;
+        
+        //self.chooseTagButton.hidden = NO;
+        self.flashButton.enabled = NO;
+        self.captureButton.hidden = YES;
+        self.previewView.hidden = YES;
+        
+        self.captureModeOn = NO;
+        /*
+         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+         */
+        //[self shouldUploadImage];
+    } else {
+        self.nextButton.hidden = YES;
+        
+        //self.chooseTagButton.hidden = YES;
+        self.flashButton.enabled = YES;
+        self.captureButton.hidden = NO;
+        self.previewView.hidden = NO;
+        
+        /*
+        self.textField.text = @"";
+        self.tag = nil;
+         */
+        self.imageDisplayView.image = nil;
+        self.stillImage = nil;
+        self.croppedImage = nil;
+        self.resizedImage = nil;
+        
+        /*
+        self.textField.hidden = YES;
+        [self.textField resignFirstResponder];
+        */
+        
+        self.captureModeOn = YES;
+        
+        /*
+         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+         */
+    }
+}
+
+#pragma mark - Properties
+
+- (void)setStillImage:(UIImage *)stillImage {
+    _stillImage = stillImage;
+    
+    self.imageDisplayView.image = stillImage;
+}
+
+#pragma mark - Get the video device for a specgified media type
 
 + (AVCaptureDevice *)deviceWithMediaType:(NSString *)mediaType preferringPosition:(AVCaptureDevicePosition)position
 {
@@ -229,6 +409,25 @@
             });
         }
     }];
+}
+
+#pragma mark - Set Flash
+
++ (void)setFlashMode:(AVCaptureFlashMode)flashMode forDevice:(AVCaptureDevice *)device
+{
+    if ([device hasFlash] && [device isFlashModeSupported:flashMode])
+    {
+        NSError *error = nil;
+        if ([device lockForConfiguration:&error])
+        {
+            [device setFlashMode:flashMode];
+            [device unlockForConfiguration];
+        }
+        else
+        {
+            NSLog(@"%@", error);
+        }
+    }
 }
 
 #pragma mark - VC Lifecycle

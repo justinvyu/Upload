@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "capture2-2.png"
+      "filename" : "capture.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "capture2.png"
+      "filename" : "capture-2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "capture2-1.png"
+      "filename" : "capture-3x.png"
     }
   ],
   "info" : {

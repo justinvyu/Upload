@@ -17,18 +17,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bqm-h1-dO1">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6yj-Tf-yE0">
                                 <rect key="frame" x="122" y="269" width="77" height="30"/>
                                 <state key="normal" title="Take Photo">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="9LA-pK-fkU" kind="modal" id="lX2-K3-qy7"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6yj-Tf-yE0">
-                                <rect key="frame" x="145" y="307" width="30" height="30"/>
-                                <state key="normal" title="Test">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -69,7 +60,7 @@
                                         <rect key="frame" x="0.0" y="420" width="320" height="148"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P1W-j4-qG5">
-                                                <rect key="frame" x="119" y="34" width="80" height="80"/>
+                                                <rect key="frame" x="149" y="49" width="50" height="50"/>
                                                 <state key="normal" backgroundImage="capture">
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -205,7 +196,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YO5-6C-IRF" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2604" y="405"/>
+            <point key="canvasLocation" x="2786" y="405"/>
         </scene>
         <!--Tags-->
         <scene sceneID="Xys-lH-T28">
@@ -263,7 +254,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="capture" width="80" height="80"/>
+        <image name="capture" width="50" height="50"/>
         <image name="flashOff" width="96" height="96"/>
         <image name="next" width="42" height="42"/>
     </resources>
