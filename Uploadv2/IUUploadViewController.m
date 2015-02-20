@@ -11,12 +11,16 @@
 #import "AVCamPreviewView.h"
 #import "UploadConstants.h"
 #import "UIImage+ResizeAdditions.h"
-#import "IUPostPhotoViewController.h"
+#import "IUPostPhotoTableViewController.h"
+#import "CameraFocusSquareView.h"
+
+#import "CEBaseInteractionController.h"
+#import "CEReversibleAnimationController.h"
 
 #import <Parse/Parse.h>
 #import <AVFoundation/AVFoundation.h>
 
-@interface IUUploadViewController () <UITextFieldDelegate>
+@interface IUUploadViewController () <UITextFieldDelegate, UIViewControllerTransitioningDelegate>
 
 // Before taking
 @property (strong, nonatomic) AVCamPreviewView *previewView;
@@ -29,7 +33,7 @@
 // After taking
 @property (strong, nonatomic) UIImageView *imageDisplayView;
 @property (strong, nonatomic) UIButton *nextButton;
-//@property (weak, nonatomic) IBOutlet UIButton *chooseTagButton;
+@property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
 
 @property (strong, nonatomic) UIButton *cancelButton;
 @property (strong, nonatomic) UIView *headerView;
@@ -47,9 +51,10 @@
 // Image Management
 @property (strong, nonatomic) UIImage *stillImage;
 //@property (strong, nonatomic) UIImage *croppedImage; // ex: 320 x 320
-//@property (strong, nonatomic) UIImage *resizedImage; // kImageHeight x kImageHeight, pixels
+@property (strong, nonatomic) UIImage *resizedImage; // kImageHeight x kImageHeight, pixels
 
 // For upload
+@property (strong, nonatomic) PFFile *imageFile;
 @property (strong, nonatomic) PFGeoPoint *coordinate;
 
 // Utils
@@ -60,7 +65,6 @@
 
 // Background Task ID
 @property (nonatomic) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
-@property (nonatomic) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
 
 // Location Task ID
 //@property (nonatomic) INTULocationRequestID locationRequestID;
@@ -142,6 +146,96 @@
         self.flashButton.tintColor = [UIColor lightGrayColor];
     }
 }
+
+- (void)presentPostPhotoVC {
+    NSLog(@"inside");
+    
+    IUPostPhotoTableViewController *ptvc = [[IUPostPhotoTableViewController alloc] initWithImage:self.resizedImage
+                                                                                       imageFile:self.imageFile
+                                                                                      coordinate:self.coordinate];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:ptvc];
+    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:navController animated:YES completion:nil];
+}
+
+- (void)focus:(UIGestureRecognizer *)gesture {
+    
+    CGPoint touchPoint = [gesture locationInView:self.previewView];
+    
+    CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self previewView] layer] captureDevicePointOfInterestForPoint:[gesture locationInView:[gesture view]]];
+    //NSLog(@"%f, %f", touchPoint.x, touchPoint.y);
+    
+    CameraFocusSquareView *camFocus = [[CameraFocusSquareView alloc]initWithFrame:CGRectMake(touchPoint.x-40, touchPoint.y-40, 80, 80)];
+    [camFocus setBackgroundColor:[UIColor clearColor]];
+    [self.previewView addSubview:camFocus];
+    [camFocus setNeedsDisplay];
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:1.5];
+    [camFocus setAlpha:0.0];
+    [UIView commitAnimations];
+    
+    [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
+}
+
+
+
+#pragma mark - Focus
+
+- (void)subjectAreaDidChange:(NSNotification *)notification
+{
+    CGPoint devicePoint = CGPointMake(.5, .5);
+    [self focusWithMode:AVCaptureFocusModeContinuousAutoFocus exposeWithMode:AVCaptureExposureModeContinuousAutoExposure atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
+}
+
+- (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
+{
+    dispatch_async([self sessionQueue], ^{
+        AVCaptureDevice *device = [[self videoDeviceInput] device];
+        NSError *error = nil;
+        if ([device lockForConfiguration:&error])
+        {
+            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:focusMode])
+            {
+                [device setFocusMode:focusMode];
+                [device setFocusPointOfInterest:point];
+            }
+            if ([device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode])
+            {
+                [device setExposureMode:exposureMode];
+                [device setExposurePointOfInterest:point];
+            }
+            [device setSubjectAreaChangeMonitoringEnabled:monitorSubjectAreaChange];
+            [device unlockForConfiguration];
+        }
+        else
+        {
+            NSLog(@"%@", error);
+        }
+    });
+}
+/*
+#pragma mark - UIViewControllerTransitioningDelegate
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
+    
+    if (self) {
+        //[self wireToViewController:presented forOperation:CEInteractionOperationDismiss];
+    }
+    
+    AppDelegateAccessor.settingsAnimationController.reverse = NO;
+    return AppDelegateAccessor.settingsAnimationController;
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    AppDelegateAccessor.settingsAnimationController.reverse = YES;
+    return AppDelegateAccessor.settingsAnimationController;
+}
+
+- (id<UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator {
+    return AppDelegateAccessor.settingsInteractionController && AppDelegateAccessor.settingsInteractionController.interactionInProgress ? AppDelegateAccessor.settingsInteractionController : nil;
+}
+*/
 
 #pragma mark - Init
 
@@ -228,6 +322,15 @@
                                         flashButtonSideLength, flashButtonSideLength);
     [self.headerView addSubview:self.flashButton];
     
+    CGFloat buttonWidth = 40;
+    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(self.headerView.bounds.size.width - buttonWidth - 7.5,
+                                                                 self.headerView.frame.origin.y + 7.5,
+                                                                 buttonWidth, flashButtonSideLength)];
+    self.nextButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+    [self.nextButton addTarget:self action:@selector(presentPostPhotoVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.headerView addSubview:self.nextButton];
+    
     // Footer View and Subviews
     
     self.footerView = [[UIView alloc] init];
@@ -251,49 +354,46 @@
     self.captureButton = [[UIButton alloc] init];
     CGFloat captureButtonSideLength = 100 > self.footerView.bounds.size.height ? self.footerView.bounds.size.height : 100;
     
-    self.captureButton.frame = CGRectMake((self.footerView.bounds.size.width / 2) - (captureButtonSideLength / 2),
-                                          (self.footerView.frame.size.height) - (1.5*captureButtonSideLength),
+    self.captureButton.frame = CGRectMake((self.view.bounds.size.width / 2) - (captureButtonSideLength / 2),
+                                          self.view.bounds.size.height - captureButtonSideLength,
                                           captureButtonSideLength, captureButtonSideLength);
     
     [self.captureButton setBackgroundImage:[UIImage imageNamed:@"capture.png"] forState:UIControlStateNormal];
 
     [self.captureButton addTarget:self action:@selector(takeStillImage) forControlEvents:UIControlEventTouchUpInside];
-    [self.subFooterView addSubview:self.captureButton];
+    [self.view addSubview:self.captureButton];
     
-    /*
-    self.nextButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    CGFloat nextButtonSideLength = 50 > self.footerView.bounds.size.height ? self.footerView.bounds.size.height : 50;
-    self.nextButton.frame = CGRectMake(self.footerView.bounds.size.width - (self.footerView.bounds.size.width / 2) - (nextButtonSideLength / 2),
-                                       (self.footerView.bounds.size.height / 2) - (nextButtonSideLength / 2),
-                                       nextButtonSideLength,
-                                       nextButtonSideLength);
-    [self.nextButton setImage:[UIImage imageNamed:@"next.png"] forState:(UIControlStateNormal | UIControlStateHighlighted)];
-    [self.footerView addSubview:self.nextButton];
-     */
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    indicator.frame = self.scrollView.frame;
+    indicator.center = self.scrollView.center;
+    self.activityIndicator = indicator;
+    [self.scrollView addSubview:indicator];
+    
+    // Tap to Focus
+    
+    UITapGestureRecognizer *focus = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(focus:)];
+    [self.previewView addGestureRecognizer:focus];
 }
 
 #pragma mark - Change Mode
 
 - (void)changeMode {
     if (self.captureModeOn) {
-        //self.nextButton.hidden = NO;
+        self.nextButton.hidden = NO;
+        self.nextButton.enabled = NO;
         //self.keyboard.hidden = NO;
         
-        self.cancelButton.enabled = NO;
         self.captureButton.hidden = YES;
+        self.imageDisplayView.hidden = NO;
         
         //self.chooseTagButton.hidden = NO;
-        self.flashButton.enabled = NO;
         self.previewView.hidden = YES;
         
         self.captureModeOn = NO;
-        /*
-         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-         */
+        self.flashButton.hidden = YES;
         [self shouldUploadImage];
     } else {
-        //self.nextButton.hidden = YES;
+        self.nextButton.hidden = YES;
         
         //self.chooseTagButton.hidden = YES;
         self.flashButton.enabled = YES;
@@ -303,6 +403,7 @@
         self.previewView.hidden = NO;
 
         self.imageDisplayView.image = nil;
+        self.imageDisplayView.hidden = YES;
         self.stillImage = nil;
         //self.resizedImage = nil;
         
@@ -313,6 +414,7 @@
 #pragma mark - Uploading Image File
 
 - (BOOL)shouldUploadImage {
+    //[self.activityIndicator startAnimating];
     /*
     UIImage *resizedStillImage = [self.stillImage resizedImage:CGSizeMake(self.view.bounds.size.width,
                                                                           self.view.bounds.size.height)
@@ -337,17 +439,18 @@
                                                                   correctImage.size.width,
                                                                   correctImage.size.height - (self.footerView.bounds.size.height * scaleFactor))];
     UIImage *resizedImage = [croppedImage resizedImage:CGSizeMake(kImageHeight, kImageHeight) interpolationQuality:kCGInterpolationHigh];
-    UIImage *thumbnailImage = [resizedImage thumbnailImage:50 transparentBorder:1.0 cornerRadius:5.0 interpolationQuality:kCGInterpolationHigh];
+    self.resizedImage = resizedImage;
+    //UIImage *thumbnailImage = [resizedImage thumbnailImage:100 transparentBorder:1.0 cornerRadius:5.0 interpolationQuality:kCGInterpolationHigh];
     
     NSData *imageData = UIImageJPEGRepresentation(resizedImage, 1.0f);
-    NSData *thumbnailImageData = UIImageJPEGRepresentation(thumbnailImage, 1.0f);
+    //NSData *thumbnailImageData = UIImageJPEGRepresentation(thumbnailImage, 1.0f);
     
     if (!imageData) {
         return NO;
     }
     
     PFFile *imageFile = [PFFile fileWithData:imageData];
-    PFFile *thumbnailImageFile = [PFFile fileWithData:thumbnailImageData];
+    //PFFile *thumbnailImageFile = [PFFile fileWithData:thumbnailImageData];
     
     // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
     self.fileUploadBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
@@ -358,20 +461,22 @@
     [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             NSLog(@"Photo uploaded successfully");
+            /*
             [thumbnailImageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (succeeded) {
                     NSLog(@"Thumbnail uploaded successfully");
-                    IUPostPhotoViewController *pvc = [[IUPostPhotoViewController alloc] initWithImage:resizedImage
-                                                                                   withThumbnailImage:thumbnailImage];
-                    pvc.modalPresentationStyle = UIModalTransitionStyleCrossDissolve;
-                    [self presentViewController:pvc animated:YES completion:nil];
+                } else {
+                    NSLog(@"Failed");
                 }
             }];
+             */
+            self.imageFile = imageFile;
+            self.nextButton.enabled = YES;
         } else {
             NSLog(@"Failed");
         }
         [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
-
+        //[self.activityIndicator stopAnimating];
     }];
     
     return YES;
@@ -462,7 +567,8 @@
     self.flashOn = NO;
     self.locked = NO;
     
-    self.imageDisplayView.userInteractionEnabled = YES;
+    self.imageDisplayView.hidden = YES;
+    self.imageDisplayView.userInteractionEnabled = NO;
     
     /*
      UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
@@ -476,7 +582,7 @@
     
     dispatch_async(sessionQueue, ^{
         self.fileUploadBackgroundTaskId = UIBackgroundTaskInvalid; // initialize as invalid, "nil"
-        self.photoPostBackgroundTaskId = UIBackgroundTaskInvalid;
+        //self.photoPostBackgroundTaskId = UIBackgroundTaskInvalid;
         
         NSError *error = nil;
         

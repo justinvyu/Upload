@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0EEA7D8BC180A057E4E26E31 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 540CD145711C9FFD855B8BEC /* libPods.a */; };
+		D0045E251A96A71400865A22 /* CameraFocusSquareView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0045E241A96A71400865A22 /* CameraFocusSquareView.m */; };
+		D0045E281A97A40200865A22 /* IUPostPhotoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0045E271A97A40200865A22 /* IUPostPhotoTableViewController.m */; };
 		D06AB8E01A8E556B00E7701F /* IUUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D06AB8DF1A8E556B00E7701F /* IUUploadViewController.m */; };
 		D07D3BB81A907A4F0064708A /* IUIndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D07D3BB71A907A4F0064708A /* IUIndexViewController.m */; };
 		D0AAD3FB1A79ED9800E77F3A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD3FA1A79ED9800E77F3A /* main.m */; };
@@ -38,7 +40,6 @@
 		D0AAD4791A79EF4900E77F3A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AAD4781A79EF4900E77F3A /* libz.dylib */; };
 		D0AAD47B1A79EF5200E77F3A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AAD47A1A79EF5200E77F3A /* libsqlite3.dylib */; };
 		D0AAD47D1A79EFFC00E77F3A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0AAD47C1A79EFFC00E77F3A /* Images.xcassets */; };
-		D0B4B0921A9593AA006D24D2 /* IUPostPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0B4B0911A9593AA006D24D2 /* IUPostPhotoViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,10 @@
 		1322D604B5E2B66C4236B403 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		19325D5CC0459E5089FAE87A /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		540CD145711C9FFD855B8BEC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0045E231A96A71400865A22 /* CameraFocusSquareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraFocusSquareView.h; sourceTree = "<group>"; };
+		D0045E241A96A71400865A22 /* CameraFocusSquareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraFocusSquareView.m; sourceTree = "<group>"; };
+		D0045E261A97A40200865A22 /* IUPostPhotoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUPostPhotoTableViewController.h; sourceTree = "<group>"; };
+		D0045E271A97A40200865A22 /* IUPostPhotoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IUPostPhotoTableViewController.m; sourceTree = "<group>"; };
 		D06AB8DE1A8E556B00E7701F /* IUUploadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUUploadViewController.h; sourceTree = "<group>"; };
 		D06AB8DF1A8E556B00E7701F /* IUUploadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IUUploadViewController.m; sourceTree = "<group>"; };
 		D07D3BB61A907A4F0064708A /* IUIndexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUIndexViewController.h; sourceTree = "<group>"; };
@@ -102,8 +107,6 @@
 		D0AAD4781A79EF4900E77F3A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		D0AAD47A1A79EF5200E77F3A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		D0AAD47C1A79EFFC00E77F3A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		D0B4B0901A9593AA006D24D2 /* IUPostPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUPostPhotoViewController.h; sourceTree = "<group>"; };
-		D0B4B0911A9593AA006D24D2 /* IUPostPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IUPostPhotoViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,8 +183,6 @@
 				D0AAD4801A79F13300E77F3A /* Delegate */,
 				D0AAD43C1A79EDF500E77F3A /* UploadConstants.h */,
 				D0AAD43D1A79EDF500E77F3A /* UploadContstants.m */,
-				D0AAD42A1A79EDD900E77F3A /* ImageCaptureViewController.h */,
-				D0AAD42B1A79EDD900E77F3A /* ImageCaptureViewController.m */,
 				D0AAD3F81A79ED9800E77F3A /* Supporting Files */,
 			);
 			path = Uploadv2;
@@ -190,6 +191,8 @@
 		D0AAD3F81A79ED9800E77F3A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D0AAD42A1A79EDD900E77F3A /* ImageCaptureViewController.h */,
+				D0AAD42B1A79EDD900E77F3A /* ImageCaptureViewController.m */,
 				D0AAD4311A79EDEA00E77F3A /* PickerTableViewController.h */,
 				D0AAD4321A79EDEA00E77F3A /* PickerTableViewController.m */,
 				D0AAD3F91A79ED9800E77F3A /* Info.plist */,
@@ -239,6 +242,8 @@
 		D0AAD47E1A79F10800E77F3A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D0045E231A96A71400865A22 /* CameraFocusSquareView.h */,
+				D0045E241A96A71400865A22 /* CameraFocusSquareView.m */,
 				D0AAD41E1A79EDB400E77F3A /* AVCamPreviewView.h */,
 				D0AAD41F1A79EDB400E77F3A /* AVCamPreviewView.m */,
 			);
@@ -252,8 +257,8 @@
 				D07D3BB71A907A4F0064708A /* IUIndexViewController.m */,
 				D06AB8DE1A8E556B00E7701F /* IUUploadViewController.h */,
 				D06AB8DF1A8E556B00E7701F /* IUUploadViewController.m */,
-				D0B4B0901A9593AA006D24D2 /* IUPostPhotoViewController.h */,
-				D0B4B0911A9593AA006D24D2 /* IUPostPhotoViewController.m */,
+				D0045E261A97A40200865A22 /* IUPostPhotoTableViewController.h */,
+				D0045E271A97A40200865A22 /* IUPostPhotoTableViewController.m */,
 			);
 			name = "View Controller";
 			sourceTree = "<group>";
@@ -429,13 +434,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				D07D3BB81A907A4F0064708A /* IUIndexViewController.m in Sources */,
+				D0045E281A97A40200865A22 /* IUPostPhotoTableViewController.m in Sources */,
 				D0AAD4271A79EDC700E77F3A /* INTULocationRequest.m in Sources */,
 				D06AB8E01A8E556B00E7701F /* IUUploadViewController.m in Sources */,
 				D0AAD4261A79EDC700E77F3A /* INTULocationManager.m in Sources */,
 				D0AAD4331A79EDEA00E77F3A /* PickerTableViewController.m in Sources */,
 				D0AAD43E1A79EDF500E77F3A /* UIImage+AlphaAdditions.m in Sources */,
 				D0AAD3FE1A79ED9800E77F3A /* AppDelegate.m in Sources */,
-				D0B4B0921A9593AA006D24D2 /* IUPostPhotoViewController.m in Sources */,
+				D0045E251A96A71400865A22 /* CameraFocusSquareView.m in Sources */,
 				D0AAD4201A79EDB400E77F3A /* AVCamPreviewView.m in Sources */,
 				D0AAD4411A79EDF500E77F3A /* UIImage+RoundedCornerAdditions.m in Sources */,
 				D0AAD4401A79EDF500E77F3A /* UIImage+ResizeAdditions.m in Sources */,

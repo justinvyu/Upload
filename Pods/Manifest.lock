@@ -29,6 +29,7 @@ PODS:
   - SOCKit (1.1)
   - SZTextView (1.1.10)
   - TransitionKit (2.1.0)
+  - VCTransitionsLibrary (1.5.0)
 
 DEPENDENCIES:
   - AFNetworking
@@ -36,6 +37,7 @@ DEPENDENCIES:
   - PKImagePicker
   - RestKit
   - SZTextView
+  - VCTransitionsLibrary
 
 SPEC CHECKSUMS:
   AFNetworking: 80c4e0652b08eb34e25b9c0ff3c82556fe5967b4
@@ -48,5 +50,6 @@ SPEC CHECKSUMS:
   SOCKit: d8d0dd3688ae1026c12367570da8fa8e1a6980fb
   SZTextView: 8f1126696c6d54e5f0d672bbecf259ef65b04aeb
   TransitionKit: 6a6f3ddda38ae758778aa889dcb930e4f8d64edc
+  VCTransitionsLibrary: 3c33ef649f7380bdb5bff5212f01c8f3f9eb5492
 
 COCOAPODS: 0.35.0

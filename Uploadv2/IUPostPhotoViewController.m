@@ -21,8 +21,6 @@
     self = [super init];
     
     if (self) {
-        
-        self.modalPresentationStyle = UIModalTransitionStyleCrossDissolve;
         self.view.backgroundColor = [UIColor whiteColor];
         
     }
