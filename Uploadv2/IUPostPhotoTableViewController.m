@@ -12,6 +12,7 @@
 #import <ActionSheetPicker-3.0/ActionSheetPicker.h>
 #import <RestKit/RestKit.h>
 #import "Event.h"
+#import "IUUploadViewController.h"
 
 @interface IUPostPhotoTableViewController () <UITableViewDelegate, UITextViewDelegate>
 
@@ -64,7 +65,9 @@
     [ActionSheetStringPicker showPickerWithTitle:@"Select a tag"
                                             rows:eventStrings
                                 initialSelection:0
-                                       doneBlock:nil
+                                       doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
+                                           self.tag = eventStrings[selectedIndex];
+                                       }
                                      cancelBlock:nil
                                           origin:sender];
 }
@@ -124,6 +127,10 @@
             NSLog(@"Photo uploaded to Parse");
             
             [[NSNotificationCenter defaultCenter] postNotificationName:ImageCaptureDidUploadPhotoNotification object:photo];
+            
+            [self dismissViewControllerAnimated:YES completion:nil];
+            
+            [(IUUploadViewController *)(self.navigationController.presentingViewController) changeMode];
         } else {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                             message:nil
@@ -200,6 +207,12 @@
     _image = image;
     
     self.imageDisplayView.image = image;
+}
+
+- (void)setTag:(NSString *)tag {
+    _tag = tag;
+    
+    self.tagCell.textLabel.text = tag;
 }
 
 - (void)viewDidLoad {

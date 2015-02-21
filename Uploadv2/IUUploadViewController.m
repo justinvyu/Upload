@@ -292,14 +292,14 @@
     // Header View and Subviews
     
     self.headerView = [[UIView alloc] init];
-    self.headerView.frame = CGRectMake(0, 0, self.scrollView.bounds.size.width, 50);
+    self.headerView.frame = CGRectMake(0, 0, self.scrollView.bounds.size.width, 44);
     self.headerView.backgroundColor = [UIColor colorWithWhite:0.1f alpha:0.8f];
     //self.headerView.alpha = 0.8f;
 
     [self.scrollView addSubview:self.headerView];
     
     self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.headerView.frame.origin.x + 10,
-                                                                   self.headerView.frame.origin.y + 10,
+                                                                   self.headerView.frame.origin.y + 8,
                                                                    30,
                                                                    30)];
     [self.cancelButton setImage:[UIImage imageNamed:@"PKImageBundle.bundle/Cancel.png"] forState:UIControlStateNormal];
@@ -315,14 +315,14 @@
     CGFloat flashButtonSideLength = 30;
     self.flashButton.tintColor = [UIColor lightGrayColor];
     self.flashButton.frame = CGRectMake(self.headerView.bounds.size.width - flashButtonSideLength - 10,
-                                        self.headerView.frame.origin.y + 10,
+                                        self.headerView.frame.origin.y + 8,
                                         flashButtonSideLength, flashButtonSideLength);
     [self.headerView addSubview:self.flashButton];
     
     CGFloat buttonWidth = 30;
     self.nextButton = [UIButton buttonWithType:UIButtonTypeSystem];
                        self.nextButton.frame = CGRectMake(self.headerView.bounds.size.width - buttonWidth - 7.5,
-                                                          self.headerView.frame.origin.y + 10,
+                                                          self.headerView.frame.origin.y + 8,
                                                           buttonWidth, buttonWidth);
     [self.nextButton setImage:[UIImage imageNamed:@"next"] forState:UIControlStateNormal];
     self.nextButton.tintColor = [UIColor whiteColor];
