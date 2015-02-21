@@ -1,6 +1,13 @@
 # Upload
 Photo Uploading Module
 
+SMALL FIXES:
+
+- Flash button disappears forever
+- Get rid of "step 2" screen, go directly from 1-3
+- Fix the event foursquare thing to get events only
+
+
 FILES NEEDED TO IMPLEMENT:
 
 -IUUploadViewController
