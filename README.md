@@ -4,10 +4,10 @@ Photo Uploading Module
 SMALL FIXES:
 
 - Fix the event foursquare thing to get events only
-~~- Flash button disappears forever~~
-~~- Get rid of "step 2" screen, go directly from 1-3~~
+- ~~Flash button disappears forever~~
+- ~~Get rid of "step 2" screen, go directly from 1-3~~
 - Images for cancel button and capture button look weird, might need to get better images
-~~- Positioning of buttons is still a little weird~~
+- ~~Positioning of buttons is still a little weird~~
 
 To implement:
 
