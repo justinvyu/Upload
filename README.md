@@ -1,6 +1,29 @@
 # Upload
 Photo Uploading Module
 
+FILES NEEDED TO IMPLEMENT:
+-IUUploadViewController
+-IUPostPhotoViewController
+-AVCamPreviewView
+-Anypic Categories
+-CameraFocusSquareView
+-UploadConstants
+
+ALL THE NECESSARY PODS/FRAMEWORKS:
+-Parse + Bolts
+-PKImagePicker (for images)
+-SZTextView
+-RestKit
+-AVFoundation
+
+ASSETS NEEDED (will put in a separate folder):
+-Cancel
+-Next
+-Back
+-Flash on/off
+-Capture (might need to make this button better)
+-Tag
+
 ~~done~~
 
 List of Things To Do:
