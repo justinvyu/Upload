@@ -10,6 +10,7 @@
 		0EEA7D8BC180A057E4E26E31 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 540CD145711C9FFD855B8BEC /* libPods.a */; };
 		D0045E251A96A71400865A22 /* CameraFocusSquareView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0045E241A96A71400865A22 /* CameraFocusSquareView.m */; };
 		D0045E281A97A40200865A22 /* IUPostPhotoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0045E271A97A40200865A22 /* IUPostPhotoTableViewController.m */; };
+		D0482B251A985802005E1990 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = D0482B241A985802005E1990 /* Event.m */; };
 		D06AB8E01A8E556B00E7701F /* IUUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D06AB8DF1A8E556B00E7701F /* IUUploadViewController.m */; };
 		D07D3BB81A907A4F0064708A /* IUIndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D07D3BB71A907A4F0064708A /* IUIndexViewController.m */; };
 		D0AAD3FB1A79ED9800E77F3A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD3FA1A79ED9800E77F3A /* main.m */; };
@@ -60,6 +61,8 @@
 		D0045E241A96A71400865A22 /* CameraFocusSquareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraFocusSquareView.m; sourceTree = "<group>"; };
 		D0045E261A97A40200865A22 /* IUPostPhotoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUPostPhotoTableViewController.h; sourceTree = "<group>"; };
 		D0045E271A97A40200865A22 /* IUPostPhotoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IUPostPhotoTableViewController.m; sourceTree = "<group>"; };
+		D0482B231A985802005E1990 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		D0482B241A985802005E1990 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		D06AB8DE1A8E556B00E7701F /* IUUploadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUUploadViewController.h; sourceTree = "<group>"; };
 		D06AB8DF1A8E556B00E7701F /* IUUploadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IUUploadViewController.m; sourceTree = "<group>"; };
 		D07D3BB61A907A4F0064708A /* IUIndexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUIndexViewController.h; sourceTree = "<group>"; };
@@ -184,6 +187,8 @@
 				D0AAD43C1A79EDF500E77F3A /* UploadConstants.h */,
 				D0AAD43D1A79EDF500E77F3A /* UploadContstants.m */,
 				D0AAD3F81A79ED9800E77F3A /* Supporting Files */,
+				D0482B231A985802005E1990 /* Event.h */,
+				D0482B241A985802005E1990 /* Event.m */,
 			);
 			path = Uploadv2;
 			sourceTree = "<group>";
@@ -437,6 +442,7 @@
 				D0045E281A97A40200865A22 /* IUPostPhotoTableViewController.m in Sources */,
 				D0AAD4271A79EDC700E77F3A /* INTULocationRequest.m in Sources */,
 				D06AB8E01A8E556B00E7701F /* IUUploadViewController.m in Sources */,
+				D0482B251A985802005E1990 /* Event.m in Sources */,
 				D0AAD4261A79EDC700E77F3A /* INTULocationManager.m in Sources */,
 				D0AAD4331A79EDEA00E77F3A /* PickerTableViewController.m in Sources */,
 				D0AAD43E1A79EDF500E77F3A /* UIImage+AlphaAdditions.m in Sources */,

@@ -10,14 +10,20 @@
 #import <SZTextView/SZTextView.h>
 #import "UploadConstants.h"
 #import <ActionSheetPicker-3.0/ActionSheetPicker.h>
+#import <RestKit/RestKit.h>
+#import "Event.h"
 
 @interface IUPostPhotoTableViewController () <UITableViewDelegate, UITextViewDelegate>
+
+#define kFoursquareClientID @"CKYNLQRGVBTFIEZXN1AAQIZHLEJHP03YJPZVIHW2XY323KUV"
+#define kFoursquareSecret @"XLEOBERHEPFCID4CIZ2543F1RO04MGU0IJ1VVRKHIC4ZCHUE"
 
 @property (strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) PFFile *imageFile;
 @property (strong, nonatomic) PFGeoPoint *coordinate;
 
 @property (strong, nonatomic) UIImageView *imageDisplayView;
+@property (strong, nonatomic) NSArray *events;
 
 @property (strong, nonatomic) UITableViewCell *imageCell;
 @property (strong, nonatomic) UITableViewCell *tagCell;
@@ -48,10 +54,15 @@
 
 - (IBAction)chooseTag:(id)sender {
     // Create an array of strings you want to show in the picker:
-    NSArray *colors = [NSArray arrayWithObjects:@"Red", @"Green", @"Blue", @"Orange", nil];
     
-    [ActionSheetStringPicker showPickerWithTitle:@"Select a Color"
-                                            rows:colors
+    NSMutableArray *eventStrings = [[NSMutableArray alloc] init];
+    for (int i = 0; i < [self.events count]; i++) {
+        Event *event = (Event *)self.events[i];
+        [eventStrings addObject:event.name];
+    }
+    
+    [ActionSheetStringPicker showPickerWithTitle:@"Select a tag"
+                                            rows:eventStrings
                                 initialSelection:0
                                        doneBlock:nil
                                      cancelBlock:nil
@@ -129,6 +140,47 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)configureRestKit {
+    // initialize AFNetworking HTTPClient
+    NSURL *baseURL = [NSURL URLWithString:@"https://api.foursquare.com"];
+    AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
+    
+    // initialize RestKit
+    RKObjectManager *objectManager = [[RKObjectManager alloc] initWithHTTPClient:client];
+    
+    // setup object mappings
+    RKObjectMapping *venueMapping = [RKObjectMapping mappingForClass:[Event class]];
+    [venueMapping addAttributeMappingsFromArray:@[@"name"]];
+    
+    // register mappings with the provider using a response descriptor
+    RKResponseDescriptor *responseDescriptor =
+    [RKResponseDescriptor responseDescriptorWithMapping:venueMapping
+                                                 method:RKRequestMethodGET
+                                            pathPattern:nil
+                                                keyPath:@"response.categories"
+                                            statusCodes:[NSIndexSet indexSetWithIndex:200]];
+    
+    [objectManager addResponseDescriptor:responseDescriptor];
+}
+
+- (void)loadEvents {
+    
+    NSDictionary *queryParams = @{@"client_id" : kFoursquareClientID,
+                                  @"client_secret" : kFoursquareSecret,
+                                  @"categoryId" : @"4d4b7105d754a06373d81259",
+                                  @"v" : @"20140118"};
+    [[RKObjectManager sharedManager] getObjectsAtPath:@"v2/venues/categories"
+                                           parameters:queryParams
+                                              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                               NSLog(@"Query success");
+                                               self.events = mappingResult.array;
+                                           }
+                                              failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                  NSLog(@"Query failed");
+                                              }];
+    
+}
+
 #pragma mark - Init
 
 - (instancetype)initWithImage:(UIImage *)image imageFile:(PFFile *)imageFile coordinate:(PFGeoPoint *)coordinate {
@@ -150,8 +202,16 @@
     self.imageDisplayView.image = image;
 }
 
-- (void)loadView {
-    [super loadView];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    /***********
+     RestKit
+     ***********/
+    
+    [self configureRestKit];
+    [self loadEvents];
+    
     self.tableView.scrollEnabled = NO;
     self.tableView.delegate = self;
     
