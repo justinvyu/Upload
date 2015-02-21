@@ -9,6 +9,7 @@
 #import "IUPostPhotoTableViewController.h"
 #import <SZTextView/SZTextView.h>
 #import "UploadConstants.h"
+#import <ActionSheetPicker-3.0/ActionSheetPicker.h>
 
 @interface IUPostPhotoTableViewController () <UITableViewDelegate, UITextViewDelegate>
 
@@ -43,6 +44,18 @@
 - (void)dismissKeyboard {
     [self.textField resignFirstResponder];
     [self.view removeGestureRecognizer:self.tap];
+}
+
+- (IBAction)chooseTag:(id)sender {
+    // Create an array of strings you want to show in the picker:
+    NSArray *colors = [NSArray arrayWithObjects:@"Red", @"Green", @"Blue", @"Orange", nil];
+    
+    [ActionSheetStringPicker showPickerWithTitle:@"Select a Color"
+                                            rows:colors
+                                initialSelection:0
+                                       doneBlock:nil
+                                     cancelBlock:nil
+                                          origin:sender];
 }
 
 - (void)uploadImage {
@@ -277,11 +290,11 @@
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%d", indexPath.row);
     
     switch (indexPath.row) {
         case 1:
             // Tag thing
+            [self performSelector:@selector(chooseTag:) withObject:[tableView cellForRowAtIndexPath:indexPath] afterDelay:0];
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
             break;
         case 3:
