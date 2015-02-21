@@ -8,47 +8,12 @@ SMALL FIXES:
 - Fix the event foursquare thing to get events only
 
 
-FILES NEEDED TO IMPLEMENT:
+To implement:
 
--IUUploadViewController
-
--IUPostPhotoViewController
-
--AVCamPreviewView
-
--Anypic Categories
-
--CameraFocusSquareView
-
--UploadConstants
-
-
-ALL THE NECESSARY PODS/FRAMEWORKS:
-
--Parse + Bolts
-
--PKImagePicker (for images)
-
--SZTextView
-
--RestKit
-
--AVFoundation
-
-
-ASSETS NEEDED (will put in a separate folder):
-
--Cancel
-
--Next
-
--Back
-
--Flash on/off
-
--Capture (might need to make this button better)
-
--Tag
+'''Objective-C
+IUUploadViewController *uvc = [[IUUploadViewController alloc] init];
+[self presentViewController:uvc animated:YES completion:nil];
+'''
 
 
 ~~done~~
