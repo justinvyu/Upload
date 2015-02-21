@@ -10,10 +10,12 @@ SMALL FIXES:
 
 To implement:
 
-'''Objective-C
-IUUploadViewController *uvc = [[IUUploadViewController alloc] init];
-[self presentViewController:uvc animated:YES completion:nil];
-'''
+```Objective-C
+- (void)presentCameraVC {
+	IUUploadViewController *uvc = [[IUUploadViewController alloc] init];
+	[self presentViewController:uvc animated:YES completion:nil];
+}
+```
 
 
 ~~done~~
