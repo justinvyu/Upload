@@ -82,7 +82,6 @@
                                        forDevice:[[self videoDeviceInput] device]];
         
         // Capture a still image.
-        // To do: animate the capture
         [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo]
                                                              completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
              if (imageDataSampleBuffer)
@@ -105,20 +104,6 @@
                      }
                  }];
                  
-                 /*
-                  CGFloat w_scaleFactor = captureImage.size.width / self.view.bounds.size.width;
-                  CGFloat h_scaleFactor = captureImage.size.height / self.view.bounds.size.height;
-                  
-                  NSLog(@"%f, %f", w_scaleFactor, h_scaleFactor);
-                  
-                  self.resizedImage = [[captureImage croppedImage:CGRectMake(0,
-                  self.headerView.bounds.size.height * w_scaleFactor,
-                  self.view.bounds.size.width * w_scaleFactor,
-                  self.view.bounds.size.width * w_scaleFactor)]
-                  resizedImage:CGSizeMake(kImageHeight, kImageHeight) interpolationQuality:kCGInterpolationHigh];
-                  
-                  */
-                 
                  [self changeMode];
              }
          }];
@@ -137,7 +122,7 @@
 - (void)toggleFlash:(UIButton *)sender {
     self.flashOn = self.flashOn ? NO : YES;
     if (self.flashOn) {
-        self.flashButton.tintColor = [UIColor colorWithRed:0.3 green:0 blue:0.3 alpha:1.0f];
+        self.flashButton.tintColor = [UIColor whiteColor];
     } else {
         self.flashButton.tintColor = [UIColor lightGrayColor];
     }
@@ -208,28 +193,6 @@
         }
     });
 }
-/*
-#pragma mark - UIViewControllerTransitioningDelegate
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
-    
-    if (self) {
-        //[self wireToViewController:presented forOperation:CEInteractionOperationDismiss];
-    }
-    
-    AppDelegateAccessor.settingsAnimationController.reverse = NO;
-    return AppDelegateAccessor.settingsAnimationController;
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    AppDelegateAccessor.settingsAnimationController.reverse = YES;
-    return AppDelegateAccessor.settingsAnimationController;
-}
-
-- (id<UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator {
-    return AppDelegateAccessor.settingsInteractionController && AppDelegateAccessor.settingsInteractionController.interactionInProgress ? AppDelegateAccessor.settingsInteractionController : nil;
-}
-*/
 
 #pragma mark - Init
 
@@ -245,18 +208,6 @@
 
 - (void)setupUI {
     self.view.backgroundColor = [UIColor blackColor];
-    
-    // Example Label Adding
-    /*
-     UILabel *label = [[UILabel alloc] init];
-     
-     label.frame = self.view.frame;
-     label.text = @"Test";
-     label.textColor = [UIColor blackColor];
-     label.textAlignment = NSTextAlignmentCenter;
-     
-     [self.view addSubview:label];
-     */
     
     // Preview View
     
@@ -315,19 +266,7 @@
                                         self.headerView.frame.origin.y + 8,
                                         flashButtonSideLength, flashButtonSideLength);
     [self.headerView addSubview:self.flashButton];
-    
-    CGFloat buttonWidth = 30;
-    self.nextButton = [UIButton buttonWithType:UIButtonTypeSystem];
-                       self.nextButton.frame = CGRectMake(self.headerView.bounds.size.width - buttonWidth - 7.5,
-                                                          self.headerView.frame.origin.y + 8,
-                                                          buttonWidth, buttonWidth);
-    [self.nextButton setImage:[UIImage imageNamed:@"next"] forState:UIControlStateNormal];
-    self.nextButton.tintColor = [UIColor whiteColor];
-    /*self.nextButton.titleLabel.font = [UIFont systemFontOfSize:16];
-    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];*/
-    [self.nextButton addTarget:self action:@selector(presentPostPhotoVC) forControlEvents:UIControlEventTouchUpInside];
-    [self.headerView addSubview:self.nextButton];
-    
+     
     // Footer View and Subviews
     
     self.footerView = [[UIView alloc] init];
@@ -360,7 +299,7 @@
     [self.captureButton addTarget:self action:@selector(takeStillImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.captureButton];
     
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     indicator.frame = self.scrollView.frame;
     indicator.center = self.scrollView.center;
     self.activityIndicator = indicator;
@@ -377,33 +316,21 @@
 - (void)changeMode {
     if (self.captureModeOn) {
         self.nextButton.hidden = NO;
-        self.nextButton.enabled = NO;
-        //self.keyboard.hidden = NO;
-        
+        self.cancelButton.hidden = YES;
         self.captureButton.hidden = YES;
         self.imageDisplayView.hidden = NO;
-        
-        //self.chooseTagButton.hidden = NO;
         self.previewView.hidden = YES;
-        
         self.captureModeOn = NO;
         self.flashButton.hidden = YES;
         [self shouldUploadImage];
     } else {
-        self.nextButton.hidden = YES;
-        
-        //self.chooseTagButton.hidden = YES;
-        self.flashButton.enabled = YES;
-        self.cancelButton.enabled = YES;
+        self.flashButton.hidden = NO;
+        self.cancelButton.hidden = NO;
         self.captureButton.hidden = NO;
-        
         self.previewView.hidden = NO;
-
         self.imageDisplayView.image = nil;
         self.imageDisplayView.hidden = YES;
         self.stillImage = nil;
-        //self.resizedImage = nil;
-        
         self.captureModeOn = YES;
     }
 }
@@ -411,21 +338,7 @@
 #pragma mark - Uploading Image File
 
 - (BOOL)shouldUploadImage {
-    //[self.activityIndicator startAnimating];
-    /*
-    UIImage *resizedStillImage = [self.stillImage resizedImage:CGSizeMake(self.view.bounds.size.width,
-                                                                          self.view.bounds.size.height)
-                                          interpolationQuality:kCGInterpolationHigh];
-    
-    // Cropped image for testing
-    self.croppedImage = [resizedStillImage croppedImage:CGRectMake(0,
-                                                                   self.headerView.bounds.size.height,
-                                                                   self.view.bounds.size.width,
-                                                                   self.view.bounds.size.width)];
-    
-    self.resizedImage = [self.croppedImage resizedImage:CGSizeMake(kImageHeight, kImageHeight)
-                                   interpolationQuality:kCGInterpolationHigh];
-    */
+    [self.activityIndicator startAnimating];
     
     CGFloat scaleFactor = (self.stillImage.size.width / self.view.bounds.size.width);
     
@@ -468,12 +381,12 @@
             }];
              */
             self.imageFile = imageFile;
-            self.nextButton.enabled = YES;
+            [self presentPostPhotoVC];
         } else {
             NSLog(@"Failed");
         }
         [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
-        //[self.activityIndicator stopAnimating];
+        [self.activityIndicator stopAnimating];
     }];
     
     return YES;
@@ -567,12 +480,6 @@
     self.imageDisplayView.hidden = YES;
     self.imageDisplayView.userInteractionEnabled = NO;
     
-    /*
-     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
-     action:@selector(handleTap:)];
-     [self.imageDisplayView addGestureRecognizer:tap];
-     */
-    
     // Not good to do all session initialization on the main queue, blocks UI b/c of [session startRunning]
     dispatch_queue_t sessionQueue = dispatch_queue_create("session queue", DISPATCH_QUEUE_SERIAL); // "line" queue
     [self setSessionQueue:sessionQueue];
@@ -640,15 +547,5 @@
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -145,6 +145,7 @@
 }
 
 - (void)cancelUpload {
+    [(IUUploadViewController *)(self.navigationController.presentingViewController) changeMode];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -226,6 +227,10 @@
     [self configureRestKit];
     [self loadEvents];
     
+    /***********
+     UI
+     ***********/
+    
     self.tableView.scrollEnabled = NO;
     self.tableView.delegate = self;
     
@@ -267,7 +272,6 @@
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
     self.tap = tap;
-    
     self.textField.delegate = self;
     
     self.uploadCell = [[UITableViewCell alloc] init];
