@@ -6,7 +6,8 @@ SMALL FIXES:
 - Flash button disappears forever
 - Get rid of "step 2" screen, go directly from 1-3
 - Fix the event foursquare thing to get events only
-
+- Images for cancel button and capture button look weird, might need to get better images
+- Positioning of buttons is still a little weird
 
 To implement:
 
