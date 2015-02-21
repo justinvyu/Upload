@@ -8,8 +8,9 @@
 
 #import "IUPostPhotoTableViewController.h"
 #import <SZTextView/SZTextView.h>
+#import "UploadConstants.h"
 
-@interface IUPostPhotoTableViewController () <UITextViewDelegate>
+@interface IUPostPhotoTableViewController () <UITableViewDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) PFFile *imageFile;
@@ -26,6 +27,8 @@
 @property (strong, nonatomic) NSString *tag;
 @property (strong, nonatomic) NSString *caption;
 
+@property (strong, nonatomic) UITapGestureRecognizer *tap;
+
 @property (strong, nonatomic) UIBarButtonItem *cancelButton;
 @property (strong, nonatomic) UIBarButtonItem *uploadButton; // for iphone 4
 
@@ -39,14 +42,77 @@
 
 - (void)dismissKeyboard {
     [self.textField resignFirstResponder];
+    [self.view removeGestureRecognizer:self.tap];
 }
 
 - (void)uploadImage {
     NSLog(@"Uploading...");
+    NSString *caption = self.textField.text;
+    NSString *tag = self.tag;
+    
+    if (!self.imageFile) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
+                                                        message:@"Make sure that you have taken a photo"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    } else if (!caption || [caption isEqualToString:@""]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
+                                                        message:@"Make sure that you have added a caption"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    } else if (!tag || [tag isEqualToString:@""]) {
+       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
+                                                       message:@"Make sure that you have added a tag"
+                                                      delegate:nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+        [alert show];
+        return;
+    } else if (!self.coordinate) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
+                                                           message:@"No location???"
+                                                          delegate:nil
+                                                 cancelButtonTitle:@"OK"
+                                                 otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    
+    PFObject *photo = [PFObject objectWithClassName:kUploadClassKey];
+    [photo setObject:self.imageFile forKey:kUploadPhotoKey];
+    [photo setObject:caption forKey:kUploadCaptionKey];
+    [photo setObject:tag forKey:kUploadTagKey];
+    [photo setObject:self.coordinate forKey:kUploadReadableGeolocationKey];
+    
+    self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+    }];
+    
+    NSLog(@"Requested background expiration task with id %lu for photo upload TO PARSE (including caption, etc.)", (unsigned long)self.photoPostBackgroundTaskId);
+    [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            NSLog(@"Photo uploaded to Parse");
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:ImageCaptureDidUploadPhotoNotification object:photo];
+        } else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
+                                                            message:nil
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+    }];
 }
 
 - (void)cancelUpload {
-    NSLog(@"cancelled");
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -71,11 +137,15 @@
     self.imageDisplayView.image = image;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)loadView {
+    [super loadView];
     self.tableView.scrollEnabled = NO;
+    self.tableView.delegate = self;
+    
+    self.photoPostBackgroundTaskId = UIBackgroundTaskInvalid;
     
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithWhite:0.1 alpha:0.9];
+    self.navigationController.navigationBar.frame = CGRectMake(0, 0, self.view.bounds.size.width, 50);
     if ([[UIScreen mainScreen] bounds].size.height < 568) {
         self.uploadButton = [[UIBarButtonItem alloc] initWithTitle:@"Upload" style:UIBarButtonItemStylePlain target:self action:@selector(uploadImage)];
         self.uploadButton.tintColor = [UIColor colorWithRed:0.4 green:0.1 blue:0.5 alpha:0.7];
@@ -109,14 +179,14 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
-    
-    [self.view addGestureRecognizer:tap];
+    self.tap = tap;
     
     self.textField.delegate = self;
     
     self.uploadCell = [[UITableViewCell alloc] init];
     self.uploadCell.textLabel.text = @"Upload";
     self.uploadCell.textLabel.textAlignment = NSTextAlignmentCenter;
+    self.uploadCell.userInteractionEnabled = YES;
     self.uploadCell.textLabel.textColor = [UIColor whiteColor];
     self.uploadCell.backgroundColor = [UIColor colorWithRed:0.4 green:0.1 blue:0.5 alpha:0.7];
 }
@@ -133,6 +203,10 @@
     
     NSUInteger newLength = [textView.text length] + [text length] - range.length;
     return (newLength > 140) ? NO : YES; // Do not allow the user to type another character if the char count is > 140
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    [self.view addGestureRecognizer:self.tap];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -180,7 +254,6 @@
     }
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     // Configure the cell...
@@ -199,6 +272,23 @@
     }
     
     return nil;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%d", indexPath.row);
+    
+    switch (indexPath.row) {
+        case 1:
+            // Tag thing
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            break;
+        case 3:
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self uploadImage];
+            break;
+    }
 }
 
 #pragma mark - Hide Status Bar

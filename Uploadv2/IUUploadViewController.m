@@ -7,7 +7,6 @@
 //
 
 #import "IUUploadViewController.h"
-#import "ImageCaptureViewController.h"
 #import "AVCamPreviewView.h"
 #import "UploadConstants.h"
 #import "UIImage+ResizeAdditions.h"
@@ -147,9 +146,7 @@
     }
 }
 
-- (void)presentPostPhotoVC {
-    NSLog(@"inside");
-    
+- (void)presentPostPhotoVC {    
     IUPostPhotoTableViewController *ptvc = [[IUPostPhotoTableViewController alloc] initWithImage:self.resizedImage
                                                                                        imageFile:self.imageFile
                                                                                       coordinate:self.coordinate];
@@ -595,6 +592,11 @@
         
         if (error) {
             NSLog(@"%@", error);
+        }
+        
+        if ([videoDevice isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus] && [videoDevice lockForConfiguration:&error]) {
+            [videoDevice setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
+            [videoDevice unlockForConfiguration];
         }
         
         if ([self.session canAddInput:videoDeviceInput]) {
