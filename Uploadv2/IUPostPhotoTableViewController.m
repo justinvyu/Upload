@@ -102,7 +102,7 @@
     self.textField = [[SZTextView alloc] init];
     self.textField.frame = CGRectInset(self.captionCell.frame, 5, 5);
     self.textField.center = self.captionCell.center;
-    self.textField.placeholder = @"Add a caption (less than 140 characters)";
+    self.textField.placeholder = @"Add a caption (140 characters maximum)";
     self.textField.font = [UIFont systemFontOfSize:15];
     [self.captionCell addSubview:self.textField];
     
@@ -144,12 +144,12 @@
             return 50;
         case 2:
             if ([[UIScreen mainScreen] bounds].size.height < 568) {
-                CGFloat height = self.view.bounds.size.height - 50 - (44/2) - self.view.bounds.size.width - self.navigationController.navigationBar.bounds.size.height;
+                CGFloat height = self.view.bounds.size.height - 50 - self.view.bounds.size.width - self.navigationController.navigationBar.bounds.size.height;
                 CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, height);
                 self.textField.frame = CGRectInset(frame, 5, 5);
                 return height;
             } else {
-                CGFloat height = self.view.bounds.size.height - 100 - (44/2) - self.view.bounds.size.width - self.navigationController.navigationBar.bounds.size.height;
+                CGFloat height = self.view.bounds.size.height - 100 - self.view.bounds.size.width - self.navigationController.navigationBar.bounds.size.height;
                 CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, height);
                 self.textField.frame = CGRectInset(frame, 5, 5);
                 return height;
@@ -199,6 +199,26 @@
     }
     
     return nil;
+}
+
+#pragma mark - Hide Status Bar
+
+// Remember to set:
+//      View controller-based status bar appearance to NO in Info.plist
+//      Status bar is initially hidden to NO in Info.plist
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
 @end

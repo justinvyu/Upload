@@ -301,8 +301,8 @@
 
     [self.scrollView addSubview:self.headerView];
     
-    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.headerView.frame.origin.x + 7.5,
-                                                                   self.headerView.frame.origin.y + 7.5,
+    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.headerView.frame.origin.x + 10,
+                                                                   self.headerView.frame.origin.y + 10,
                                                                    30,
                                                                    30)];
     [self.cancelButton setImage:[UIImage imageNamed:@"PKImageBundle.bundle/Cancel.png"] forState:UIControlStateNormal];
@@ -317,17 +317,20 @@
     [self.flashButton addTarget:self action:@selector(toggleFlash:) forControlEvents:UIControlEventTouchUpInside];
     CGFloat flashButtonSideLength = 30;
     self.flashButton.tintColor = [UIColor lightGrayColor];
-    self.flashButton.frame = CGRectMake(self.headerView.bounds.size.width - flashButtonSideLength - 7.5,
-                                        self.headerView.frame.origin.y + 7.5,
+    self.flashButton.frame = CGRectMake(self.headerView.bounds.size.width - flashButtonSideLength - 10,
+                                        self.headerView.frame.origin.y + 10,
                                         flashButtonSideLength, flashButtonSideLength);
     [self.headerView addSubview:self.flashButton];
     
-    CGFloat buttonWidth = 40;
-    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(self.headerView.bounds.size.width - buttonWidth - 7.5,
-                                                                 self.headerView.frame.origin.y + 7.5,
-                                                                 buttonWidth, flashButtonSideLength)];
-    self.nextButton.titleLabel.font = [UIFont systemFontOfSize:14];
-    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+    CGFloat buttonWidth = 30;
+    self.nextButton = [UIButton buttonWithType:UIButtonTypeSystem];
+                       self.nextButton.frame = CGRectMake(self.headerView.bounds.size.width - buttonWidth - 7.5,
+                                                          self.headerView.frame.origin.y + 10,
+                                                          buttonWidth, buttonWidth);
+    [self.nextButton setImage:[UIImage imageNamed:@"next"] forState:UIControlStateNormal];
+    self.nextButton.tintColor = [UIColor whiteColor];
+    /*self.nextButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];*/
     [self.nextButton addTarget:self action:@selector(presentPostPhotoVC) forControlEvents:UIControlEventTouchUpInside];
     [self.headerView addSubview:self.nextButton];
     
@@ -352,7 +355,7 @@
     [self.footerView addSubview:self.subFooterView];
     
     self.captureButton = [[UIButton alloc] init];
-    CGFloat captureButtonSideLength = 100 > self.footerView.bounds.size.height ? self.footerView.bounds.size.height : 100;
+    CGFloat captureButtonSideLength = 80 > self.footerView.bounds.size.height ? self.footerView.bounds.size.height : 80;
     
     self.captureButton.frame = CGRectMake((self.view.bounds.size.width / 2) - (captureButtonSideLength / 2),
                                           self.view.bounds.size.height - captureButtonSideLength,
