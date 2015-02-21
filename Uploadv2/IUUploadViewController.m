@@ -13,13 +13,10 @@
 #import "IUPostPhotoTableViewController.h"
 #import "CameraFocusSquareView.h"
 
-#import "CEBaseInteractionController.h"
-#import "CEReversibleAnimationController.h"
-
 #import <Parse/Parse.h>
 #import <AVFoundation/AVFoundation.h>
 
-@interface IUUploadViewController () <UITextFieldDelegate, UIViewControllerTransitioningDelegate>
+@interface IUUploadViewController () <UITextFieldDelegate>
 
 // Before taking
 @property (strong, nonatomic) AVCamPreviewView *previewView;

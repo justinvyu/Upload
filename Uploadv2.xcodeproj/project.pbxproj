@@ -18,10 +18,6 @@
 		D0AAD4091A79ED9800E77F3A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0AAD4071A79ED9800E77F3A /* LaunchScreen.xib */; };
 		D0AAD4151A79ED9800E77F3A /* Uploadv2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD4141A79ED9800E77F3A /* Uploadv2Tests.m */; };
 		D0AAD4201A79EDB400E77F3A /* AVCamPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD41F1A79EDB400E77F3A /* AVCamPreviewView.m */; };
-		D0AAD4261A79EDC700E77F3A /* INTULocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD4221A79EDC700E77F3A /* INTULocationManager.m */; };
-		D0AAD4271A79EDC700E77F3A /* INTULocationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD4241A79EDC700E77F3A /* INTULocationRequest.m */; };
-		D0AAD42F1A79EDD900E77F3A /* ImageCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD42B1A79EDD900E77F3A /* ImageCaptureViewController.m */; };
-		D0AAD4331A79EDEA00E77F3A /* PickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD4321A79EDEA00E77F3A /* PickerTableViewController.m */; };
 		D0AAD43E1A79EDF500E77F3A /* UIImage+AlphaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD4351A79EDF500E77F3A /* UIImage+AlphaAdditions.m */; };
 		D0AAD4401A79EDF500E77F3A /* UIImage+ResizeAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD4391A79EDF500E77F3A /* UIImage+ResizeAdditions.m */; };
 		D0AAD4411A79EDF500E77F3A /* UIImage+RoundedCornerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D0AAD43B1A79EDF500E77F3A /* UIImage+RoundedCornerAdditions.m */; };
@@ -78,15 +74,6 @@
 		D0AAD4141A79ED9800E77F3A /* Uploadv2Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Uploadv2Tests.m; sourceTree = "<group>"; };
 		D0AAD41E1A79EDB400E77F3A /* AVCamPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCamPreviewView.h; sourceTree = "<group>"; };
 		D0AAD41F1A79EDB400E77F3A /* AVCamPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCamPreviewView.m; sourceTree = "<group>"; };
-		D0AAD4211A79EDC700E77F3A /* INTULocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INTULocationManager.h; sourceTree = "<group>"; };
-		D0AAD4221A79EDC700E77F3A /* INTULocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INTULocationManager.m; sourceTree = "<group>"; };
-		D0AAD4231A79EDC700E77F3A /* INTULocationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INTULocationRequest.h; sourceTree = "<group>"; };
-		D0AAD4241A79EDC700E77F3A /* INTULocationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = INTULocationRequest.m; sourceTree = "<group>"; };
-		D0AAD4251A79EDC700E77F3A /* INTULocationRequestDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INTULocationRequestDefines.h; sourceTree = "<group>"; };
-		D0AAD42A1A79EDD900E77F3A /* ImageCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCaptureViewController.h; sourceTree = "<group>"; };
-		D0AAD42B1A79EDD900E77F3A /* ImageCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCaptureViewController.m; sourceTree = "<group>"; };
-		D0AAD4311A79EDEA00E77F3A /* PickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickerTableViewController.h; sourceTree = "<group>"; };
-		D0AAD4321A79EDEA00E77F3A /* PickerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerTableViewController.m; sourceTree = "<group>"; };
 		D0AAD4341A79EDF500E77F3A /* UIImage+AlphaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+AlphaAdditions.h"; sourceTree = "<group>"; };
 		D0AAD4351A79EDF500E77F3A /* UIImage+AlphaAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+AlphaAdditions.m"; sourceTree = "<group>"; };
 		D0AAD4381A79EDF500E77F3A /* UIImage+ResizeAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ResizeAdditions.h"; sourceTree = "<group>"; };
@@ -182,7 +169,6 @@
 				D0AAD4821A79F16100E77F3A /* Categories */,
 				D0AAD47E1A79F10800E77F3A /* Views */,
 				D0AAD47F1A79F11B00E77F3A /* View Controller */,
-				D0AAD4811A79F14D00E77F3A /* INTULocationManager */,
 				D0AAD4801A79F13300E77F3A /* Delegate */,
 				D0AAD43C1A79EDF500E77F3A /* UploadConstants.h */,
 				D0AAD43D1A79EDF500E77F3A /* UploadContstants.m */,
@@ -196,10 +182,6 @@
 		D0AAD3F81A79ED9800E77F3A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				D0AAD42A1A79EDD900E77F3A /* ImageCaptureViewController.h */,
-				D0AAD42B1A79EDD900E77F3A /* ImageCaptureViewController.m */,
-				D0AAD4311A79EDEA00E77F3A /* PickerTableViewController.h */,
-				D0AAD4321A79EDEA00E77F3A /* PickerTableViewController.m */,
 				D0AAD3F91A79ED9800E77F3A /* Info.plist */,
 				D0AAD3FA1A79ED9800E77F3A /* main.m */,
 			);
@@ -275,18 +257,6 @@
 				D0AAD3FD1A79ED9800E77F3A /* AppDelegate.m */,
 			);
 			name = Delegate;
-			sourceTree = "<group>";
-		};
-		D0AAD4811A79F14D00E77F3A /* INTULocationManager */ = {
-			isa = PBXGroup;
-			children = (
-				D0AAD4211A79EDC700E77F3A /* INTULocationManager.h */,
-				D0AAD4221A79EDC700E77F3A /* INTULocationManager.m */,
-				D0AAD4231A79EDC700E77F3A /* INTULocationRequest.h */,
-				D0AAD4241A79EDC700E77F3A /* INTULocationRequest.m */,
-				D0AAD4251A79EDC700E77F3A /* INTULocationRequestDefines.h */,
-			);
-			name = INTULocationManager;
 			sourceTree = "<group>";
 		};
 		D0AAD4821A79F16100E77F3A /* Categories */ = {
@@ -440,11 +410,8 @@
 			files = (
 				D07D3BB81A907A4F0064708A /* IUIndexViewController.m in Sources */,
 				D0045E281A97A40200865A22 /* IUPostPhotoTableViewController.m in Sources */,
-				D0AAD4271A79EDC700E77F3A /* INTULocationRequest.m in Sources */,
 				D06AB8E01A8E556B00E7701F /* IUUploadViewController.m in Sources */,
 				D0482B251A985802005E1990 /* Event.m in Sources */,
-				D0AAD4261A79EDC700E77F3A /* INTULocationManager.m in Sources */,
-				D0AAD4331A79EDEA00E77F3A /* PickerTableViewController.m in Sources */,
 				D0AAD43E1A79EDF500E77F3A /* UIImage+AlphaAdditions.m in Sources */,
 				D0AAD3FE1A79ED9800E77F3A /* AppDelegate.m in Sources */,
 				D0045E251A96A71400865A22 /* CameraFocusSquareView.m in Sources */,
@@ -452,7 +419,6 @@
 				D0AAD4411A79EDF500E77F3A /* UIImage+RoundedCornerAdditions.m in Sources */,
 				D0AAD4401A79EDF500E77F3A /* UIImage+ResizeAdditions.m in Sources */,
 				D0AAD4421A79EDF500E77F3A /* UploadContstants.m in Sources */,
-				D0AAD42F1A79EDD900E77F3A /* ImageCaptureViewController.m in Sources */,
 				D0AAD3FB1A79ED9800E77F3A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -18,6 +18,25 @@ To implement:
 }
 ```
 
+Files needed:
+```Objective-C
+#import "IUUploadViewController"
+#import "IUPostPhotoViewController"
+
+#import "AVCamPreviewView.h"
+#import "UploadConstants.h"
+#import "UIImage+ResizeAdditions.h"
+#import "IUPostPhotoTableViewController.h"
+#import "CameraFocusSquareView.h"
+#import "Event.h"
+
+#import <Parse/Parse.h>
+#import <AVFoundation/AVFoundation.h>
+
+#import <SZTextView/SZTextView.h>
+#import <ActionSheetPicker-3.0/ActionSheetPicker.h>
+#import <RestKit/RestKit.h>
+```
 
 ~~done~~
 

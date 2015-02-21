@@ -7,12 +7,13 @@
 //
 
 #import "IUPostPhotoTableViewController.h"
-#import <SZTextView/SZTextView.h>
 #import "UploadConstants.h"
-#import <ActionSheetPicker-3.0/ActionSheetPicker.h>
-#import <RestKit/RestKit.h>
 #import "Event.h"
 #import "IUUploadViewController.h"
+
+#import <SZTextView/SZTextView.h>
+#import <ActionSheetPicker-3.0/ActionSheetPicker.h>
+#import <RestKit/RestKit.h>
 
 @interface IUPostPhotoTableViewController () <UITableViewDelegate, UITextViewDelegate>
 
