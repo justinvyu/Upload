@@ -157,8 +157,6 @@
     [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
 }
 
-
-
 #pragma mark - Focus
 
 - (void)subjectAreaDidChange:(NSNotification *)notification
@@ -206,6 +204,9 @@
     return self;
 }
 
+#define VIEW_HEIGHT self.view.bounds.size.height
+#define VIEW_WIDTH self.view.bounds.size.width
+
 - (void)setupUI {
     self.view.backgroundColor = [UIColor blackColor];
     
@@ -219,6 +220,18 @@
     // Create AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     self.session = session;
+    
+    
+    
+    /** CHANGE **/
+    
+    // Special config for iPad
+    // Keep the default if iPhone
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [self.session setSessionPreset:AVCaptureSessionPresetPhoto];
+    }
+    
+    
     
     self.previewView.session = session;
     
@@ -281,18 +294,34 @@
     
     self.subFooterView = [[UIView alloc] init];
     
+    
+    
+    
+    /** CHANGE **/
     self.subFooterView.frame = CGRectMake(0, 50,
                                           self.footerView.bounds.size.width,
-                                          self.scrollView.bounds.size.height - self.footerView.bounds.size.height + 50);
+                                          self.footerView.bounds.size.height - 50);
+    
+    
+    
+    
     self.subFooterView.backgroundColor = [UIColor colorWithWhite:0.1f alpha:1.0f];
     [self.footerView addSubview:self.subFooterView];
     
     self.captureButton = [[UIButton alloc] init];
     CGFloat captureButtonSideLength = 80 > self.footerView.bounds.size.height ? self.footerView.bounds.size.height : 80;
     
+    //NSLog(@"%f", self.subFooterView.bounds.size.height);
+    
+    
+    
+    /** CHANGE **/
     self.captureButton.frame = CGRectMake((self.view.bounds.size.width / 2) - (captureButtonSideLength / 2),
-                                          self.view.bounds.size.height - captureButtonSideLength,
+                                          VIEW_HEIGHT - (self.subFooterView.bounds.size.height / 2) - (captureButtonSideLength / 2),
                                           captureButtonSideLength, captureButtonSideLength);
+    
+    
+    
     
     [self.captureButton setBackgroundImage:[UIImage imageNamed:@"capture.png"] forState:UIControlStateNormal];
 
@@ -489,7 +518,6 @@
         //self.photoPostBackgroundTaskId = UIBackgroundTaskInvalid;
         
         NSError *error = nil;
-        
         AVCaptureDevice *videoDevice = [IUUploadViewController deviceWithMediaType:AVMediaTypeVideo
                                                                 preferringPosition:AVCaptureDevicePositionBack];
         AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
@@ -518,6 +546,10 @@
             [self setStillImageOutput:stillImageOutput];
         }
     });
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;
 }
 
 #pragma mark - Hide Status Bar

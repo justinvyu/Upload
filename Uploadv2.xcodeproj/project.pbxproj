@@ -546,7 +546,7 @@
 				INFOPLIST_FILE = Uploadv2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "80f9ebab-7652-4da1-b3ef-e8ea5c37400b";
 			};
 			name = Debug;
 		};
@@ -565,7 +565,7 @@
 				INFOPLIST_FILE = Uploadv2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "80f9ebab-7652-4da1-b3ef-e8ea5c37400b";
 			};
 			name = Release;
 		};

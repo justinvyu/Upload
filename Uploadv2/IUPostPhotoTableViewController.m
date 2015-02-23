@@ -337,10 +337,10 @@
     // Return the number of rows in the section.
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     if (screenRect.size.height < 568) {
-        NSLog(@"iphone 4");
+        //NSLog(@"iphone 4");
         return 3;
     } else {
-        NSLog(@"iphone 5+");
+        //NSLog(@"iphone 5+");
         return 4;
     }
 }
@@ -400,6 +400,14 @@
 
 - (BOOL)prefersStatusBarHidden {
     return YES;
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end
