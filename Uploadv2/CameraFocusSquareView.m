@@ -13,8 +13,7 @@ const float squareLength = 80.0f;
 
 @implementation CameraFocusSquareView
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
@@ -24,7 +23,7 @@ const float squareLength = 80.0f;
         //[self.layer setCornerRadius:4.0];
         [self.layer setBorderColor:[UIColor whiteColor].CGColor];
         
-        CABasicAnimation* selectionAnimation = [CABasicAnimation
+        CABasicAnimation *selectionAnimation = [CABasicAnimation
                                                 animationWithKeyPath:@"borderColor"];
         selectionAnimation.toValue = (id)[UIColor purpleColor].CGColor;
         selectionAnimation.repeatCount = 2;
@@ -34,4 +33,5 @@ const float squareLength = 80.0f;
     }
     return self;
 }
+
 @end

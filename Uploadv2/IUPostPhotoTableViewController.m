@@ -77,7 +77,6 @@
     NSLog(@"Uploading...");
     NSString *caption = self.textField.text;
     NSString *tag = self.tag;
-    
     if (!self.imageFile) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                         message:@"Make sure that you have taken a photo"
@@ -190,20 +189,7 @@
     
 }
 
-#pragma mark - Init
-
-- (instancetype)initWithImage:(UIImage *)image imageFile:(PFFile *)imageFile coordinate:(PFGeoPoint *)coordinate {
-    self = [super init];
-    
-    if (self) {
-        // init
-        self.image = image;
-        self.imageFile = imageFile;
-        self.coordinate = coordinate;
-    }
-    
-    return self;
-}
+#pragma mark - Properties
 
 - (void)setImage:(UIImage *)image {
     _image = image;
@@ -217,6 +203,26 @@
     self.tagCell.textLabel.text = tag;
 }
 
+#pragma mark - Initialization of View Controller
+
+- (instancetype)initWithImage:(UIImage *)image imageFile:(PFFile *)imageFile coordinate:(PFGeoPoint *)coordinate {
+    self = [super init];
+    if (self) {
+        // init
+        self.image = image;
+        self.imageFile = imageFile;
+        self.coordinate = coordinate;
+    }
+    return self;
+}
+
+/**
+ *  Configures RestKit and retrieves information from Foursquare.
+ *
+ *  Initializes the UI (views and their delegates / data sources).
+ *
+ *  Initializes many of the properties needed to upload the photo (BackgroundId)
+ */
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -284,11 +290,15 @@
 
 #pragma mark - UITextViewDelegate
 
+/**
+ *  Limits the textView's character length to 140 or less.
+ *
+ *  @return Returns a BOOL value that is true when there are less than 140 characters and false when
+ *          there is more than 140 characters.
+ */
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    
     // Prevent crashing undo bug – see note below.
-    if(range.length + range.location > textView.text.length)
-    {
+    if (range.length + range.location > textView.text.length) {
         return NO;
     }
     
@@ -300,32 +310,6 @@
     [self.view addGestureRecognizer:self.tap];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    switch (indexPath.row) {
-        case 0:
-            return self.view.bounds.size.width;
-        case 1:
-            return 50;
-        case 2:
-            if ([[UIScreen mainScreen] bounds].size.height < 568) {
-                CGFloat height = self.view.bounds.size.height - 50 - self.view.bounds.size.width - self.navigationController.navigationBar.bounds.size.height;
-                CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, height);
-                self.textField.frame = CGRectInset(frame, 5, 5);
-                return height;
-            } else {
-                CGFloat height = self.view.bounds.size.height - 100 - self.view.bounds.size.width - self.navigationController.navigationBar.bounds.size.height;
-                CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, height);
-                self.textField.frame = CGRectInset(frame, 5, 5);
-                return height;
-            }
-        case 3:
-            return 50;
-    }
-    return 44;
-}
-
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -333,6 +317,14 @@
     return 1;
 }
 
+/**
+ *  Calculates the screensize to see if it is an iPhone 4 (or smaller). If it
+ *  is an iPhone 5 or larger, 4 cells are used (bottom is an upload button). If the
+ *  device is an iPhone 4 or smaller, only 3 cells are used, but there is an upload button
+ *  on the navigation bar.
+ *
+ *  @return Returns a calculated number of rows (depending on the device).
+ */
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     CGRect screenRect = [[UIScreen mainScreen] bounds];
@@ -345,10 +337,13 @@
     }
 }
 
+/**
+ *  This delegate method checks to see what cell should be returned for a certain indexPath.
+ *
+ *  @return A initialized cell suited for an indexPath value.
+ */
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     // Configure the cell...
-    
     if (indexPath.section == 0) {
         switch (indexPath.row) {
             case 0:
@@ -361,14 +356,56 @@
                 return self.uploadCell;
         }
     }
-    
     return nil;
+}
+
+/**
+ *  This delegate method returns the height for the static cells. Since these cells are 
+ *  static, a switch is used to determine which cell's height is being determined.
+ *
+ *  @param tableView This is the table view in which the cell is located.
+ *  @param indexPath This is the index path of the cell in the tableview.
+ *
+ *  @return This returns a CGFloat value of the height for the cell.
+ */
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    switch (indexPath.row) {
+        case 0:
+            return self.view.bounds.size.width;
+        case 1:
+            return 50;
+        case 2:
+            if ([[UIScreen mainScreen] bounds].size.height < 568) {
+                // height of the second cell is variable
+                
+                // To calculate, subtract the screen height by 50 (because there is another cell that is always 50
+                // tall and then subtract the screen's width (cell index 0's height) and the navigation bar's height since
+                // that must also be accounted for.
+                CGFloat height = self.view.bounds.size.height - 50 - self.view.bounds.size.width - self.navigationController.navigationBar.bounds.size.height;
+                CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, height);
+                self.textField.frame = CGRectInset(frame, 5, 5);
+                return height;
+            } else {
+                // Same calculation for the iPhone 5+, but subtracting 100 since there is another 50 tall upload button.
+                CGFloat height = self.view.bounds.size.height - 100 - self.view.bounds.size.width - self.navigationController.navigationBar.bounds.size.height;
+                CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, height);
+                self.textField.frame = CGRectInset(frame, 5, 5);
+                return height;
+            }
+        case 3:
+            return 50;
+    }
+    return 44;
 }
 
 #pragma mark - UITableViewDelegate
 
+/**
+ *  Performs a selector based on the index of the cell pressed. Deselects afterwards to get rid of the grey
+ *  highlighted color.
+ *
+ */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     switch (indexPath.row) {
         case 1:
             // Tag thing
@@ -387,7 +424,6 @@
 // Remember to set:
 //      View controller-based status bar appearance to NO in Info.plist
 //      Status bar is initially hidden to NO in Info.plist
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:YES];

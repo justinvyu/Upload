@@ -61,7 +61,6 @@
 
 // Background Task ID
 @property (nonatomic) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
-
 // Location Task ID
 //@property (nonatomic) INTULocationRequestID locationRequestID;
 
@@ -84,15 +83,14 @@
         // Capture a still image.
         [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo]
                                                              completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
-             if (imageDataSampleBuffer)
-             {
+             if (imageDataSampleBuffer) {
                  NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                  // send over image and present edit vc
                  UIImage *captureImage = [UIImage imageWithData:imageData];
-                 
-                 if (!captureImage)
+                 if (!captureImage) {
                      return;
-                 
+                 }
+
                  self.stillImage = captureImage;
                  
                  [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
@@ -159,34 +157,27 @@
 
 #pragma mark - Focus
 
-- (void)subjectAreaDidChange:(NSNotification *)notification
-{
+- (void)subjectAreaDidChange:(NSNotification *)notification {
     CGPoint devicePoint = CGPointMake(.5, .5);
     [self focusWithMode:AVCaptureFocusModeContinuousAutoFocus exposeWithMode:AVCaptureExposureModeContinuousAutoExposure atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
 }
 
-- (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
-{
+- (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange {
     dispatch_async([self sessionQueue], ^{
         AVCaptureDevice *device = [[self videoDeviceInput] device];
         NSError *error = nil;
-        if ([device lockForConfiguration:&error])
-        {
-            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:focusMode])
-            {
+        if ([device lockForConfiguration:&error]) {
+            if ([device isFocusPointOfInterestSupported] && [device isFocusModeSupported:focusMode]) {
                 [device setFocusMode:focusMode];
                 [device setFocusPointOfInterest:point];
             }
-            if ([device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode])
-            {
+            if ([device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode]) {
                 [device setExposureMode:exposureMode];
                 [device setExposurePointOfInterest:point];
             }
             [device setSubjectAreaChangeMonitoringEnabled:monitorSubjectAreaChange];
             [device unlockForConfiguration];
-        }
-        else
-        {
+        } else {
             NSLog(@"%@", error);
         }
     });
@@ -196,11 +187,9 @@
 
 - (instancetype)init {
     self = [super init];
-    
     if (self) {
         
     }
-    
     return self;
 }
 
@@ -383,7 +372,6 @@
     
     NSData *imageData = UIImageJPEGRepresentation(resizedImage, 1.0f);
     //NSData *thumbnailImageData = UIImageJPEGRepresentation(thumbnailImage, 1.0f);
-    
     if (!imageData) {
         return NO;
     }
@@ -417,7 +405,6 @@
         [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
         [self.activityIndicator stopAnimating];
     }];
-    
     return YES;
 }
 
@@ -431,25 +418,19 @@
 
 #pragma mark - Get the video device for a specgified media type
 
-+ (AVCaptureDevice *)deviceWithMediaType:(NSString *)mediaType preferringPosition:(AVCaptureDevicePosition)position
-{
++ (AVCaptureDevice *)deviceWithMediaType:(NSString *)mediaType preferringPosition:(AVCaptureDevicePosition)position {
     // Get the preferred camera
     
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:mediaType];
     AVCaptureDevice *captureDevice = [devices firstObject];
-    
-    for (AVCaptureDevice *device in devices)
-    {
-        if ([device position] == position)
-        {
+    for (AVCaptureDevice *device in devices) {
+        if ([device position] == position) {
             captureDevice = device;
             break;
         }
     }
-    
     return captureDevice;
 }
-
 
 #pragma mark - Check if Device has Camera Authorization
 
@@ -475,18 +456,13 @@
 
 #pragma mark - Set Flash
 
-+ (void)setFlashMode:(AVCaptureFlashMode)flashMode forDevice:(AVCaptureDevice *)device
-{
-    if ([device hasFlash] && [device isFlashModeSupported:flashMode])
-    {
++ (void)setFlashMode:(AVCaptureFlashMode)flashMode forDevice:(AVCaptureDevice *)device {
+    if ([device hasFlash] && [device isFlashModeSupported:flashMode]) {
         NSError *error = nil;
-        if ([device lockForConfiguration:&error])
-        {
+        if ([device lockForConfiguration:&error]) {
             [device setFlashMode:flashMode];
             [device unlockForConfiguration];
-        }
-        else
-        {
+        } else {
             NSLog(@"%@", error);
         }
     }
@@ -521,16 +497,13 @@
         AVCaptureDevice *videoDevice = [IUUploadViewController deviceWithMediaType:AVMediaTypeVideo
                                                                 preferringPosition:AVCaptureDevicePositionBack];
         AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
-        
         if (error) {
             NSLog(@"%@", error);
         }
-        
         if ([videoDevice isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus] && [videoDevice lockForConfiguration:&error]) {
             [videoDevice setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
             [videoDevice unlockForConfiguration];
         }
-        
         if ([self.session canAddInput:videoDeviceInput]) {
             [self.session addInput:videoDeviceInput];
             [self setVideoDeviceInput:videoDeviceInput];
@@ -557,7 +530,6 @@
 // Remember to set:
 //      View controller-based status bar appearance to NO in Info.plist
 //      Status bar is initially hidden to NO in Info.plist
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:YES];

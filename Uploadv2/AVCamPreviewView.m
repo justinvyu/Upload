@@ -50,18 +50,15 @@
 
 @implementation AVCamPreviewView
 
-+ (Class)layerClass
-{
++ (Class)layerClass {
 	return [AVCaptureVideoPreviewLayer class];
 }
 
-- (AVCaptureSession *)session
-{
+- (AVCaptureSession *)session {
 	return [(AVCaptureVideoPreviewLayer *)[self layer] session];
 }
 
-- (void)setSession:(AVCaptureSession *)session
-{
+- (void)setSession:(AVCaptureSession *)session {
 	[(AVCaptureVideoPreviewLayer *)[self layer] setSession:session];
 }
 
