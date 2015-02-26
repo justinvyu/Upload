@@ -355,6 +355,14 @@
 
 #pragma mark - Uploading Image File
 
+/**
+ *  Checks to see if the image is correctly outputted from AVFoundation crops and resizes to make a 600 by 600
+ *  image, and uploads the imageFile to Parse.
+ *
+ *  Commented out: Thumbnail image support
+ *
+ *  @return YES or NO depending on whether or not the image can be uploaded.
+ */
 - (BOOL)shouldUploadImage {
     [self.activityIndicator startAnimating];
     
@@ -401,6 +409,13 @@
             [self presentPostPhotoVC];
         } else {
             NSLog(@"Failed");
+            [self.activityIndicator stopAnimating];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
+                                            message:@"Make sure you have internet connection"
+                                           delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            });
+            
         }
         [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
         [self.activityIndicator stopAnimating];
