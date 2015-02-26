@@ -16,7 +16,7 @@
 #import <Parse/Parse.h>
 #import <AVFoundation/AVFoundation.h>
 
-@interface IUUploadViewController () <UITextFieldDelegate>
+@interface IUUploadViewController () <UITextFieldDelegate, IUPostPhotoTableViewControllerDelegate>
 
 // Before taking
 @property (strong, nonatomic) AVCamPreviewView *previewView;
@@ -61,8 +61,6 @@
 
 // Background Task ID
 @property (nonatomic) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
-// Location Task ID
-//@property (nonatomic) INTULocationRequestID locationRequestID;
 
 @end
 
@@ -110,11 +108,7 @@
 
 - (void)touchCancelButton {
     // Cancel any ongoing background actions
-    if (!self.captureModeOn) {
-        [self changeMode];
-    } else {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)toggleFlash:(UIButton *)sender {
@@ -153,6 +147,12 @@
     [UIView commitAnimations];
     
     [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
+}
+
+#pragma mark - IUPostPhotoTableViewControllerDelegate
+
+- (void)postUploaded:(IUPostPhotoTableViewController *)sender {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Focus

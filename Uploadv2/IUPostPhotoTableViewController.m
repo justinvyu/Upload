@@ -20,7 +20,6 @@
 #define kFoursquareClientID @"CKYNLQRGVBTFIEZXN1AAQIZHLEJHP03YJPZVIHW2XY323KUV"
 #define kFoursquareSecret @"XLEOBERHEPFCID4CIZ2543F1RO04MGU0IJ1VVRKHIC4ZCHUE"
 
-@property (strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) PFFile *imageFile;
 @property (strong, nonatomic) PFGeoPoint *coordinate;
 
@@ -144,7 +143,8 @@
 }
 
 - (void)cancelUpload {
-    [(IUUploadViewController *)(self.navigationController.presentingViewController) changeMode];
+    //[(IUUploadViewController *)(self.navigationController.presentingViewController) changeMode];
+    [self performSelector:@selector(postUploaded:) withObject:self afterDelay:0.0f];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

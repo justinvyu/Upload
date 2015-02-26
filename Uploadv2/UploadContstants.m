@@ -12,11 +12,11 @@
 CGFloat const kImageHeight = 600.0f;
 
 #pragma mark - Photo Upload Keys
-NSString *const kUploadClassKey = @"Photo";
-NSString *const kUploadPhotoKey = @"image";
-NSString *const kUploadTagKey = @"tag";
-NSString *const kUploadCaptionKey = @"caption";
-NSString *const kUploadReadableGeolocationKey = @"coordinate";
+NSString * const kUploadClassKey = @"Photo";
+NSString * const kUploadPhotoKey = @"image";
+NSString * const kUploadTagKey = @"tag";
+NSString * const kUploadCaptionKey = @"caption";
+NSString * const kUploadReadableGeolocationKey = @"coordinate";
 
 #pragma mark - NSNotificationCenter
-NSString *const ImageCaptureDidUploadPhotoNotification = @"imageCaptureDidUploadPhotoNotification";
+NSString * const ImageCaptureDidUploadPhotoNotification = @"imageCaptureDidUploadPhotoNotification";
