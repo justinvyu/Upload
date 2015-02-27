@@ -11,18 +11,20 @@
 #import "Event.h"
 #import "IUUploadViewController.h"
 
+#import "UIImage+ResizeAdditions.h"
 #import <SZTextView/SZTextView.h>
 #import <ActionSheetPicker-3.0/ActionSheetPicker.h>
+#import <TPKeyboardAvoiding/TPKeyboardAvoidingTableView.h>
 #import <RestKit/RestKit.h>
 
-@interface IUPostPhotoTableViewController () <UITableViewDelegate, UITextViewDelegate>
+@interface IUPostPhotoTableViewController () <UITableViewDelegate, UITextFieldDelegate, UITextViewDelegate>
 
 #define kFoursquareClientID @"CKYNLQRGVBTFIEZXN1AAQIZHLEJHP03YJPZVIHW2XY323KUV"
 #define kFoursquareSecret @"XLEOBERHEPFCID4CIZ2543F1RO04MGU0IJ1VVRKHIC4ZCHUE"
 
-@property (strong, nonatomic) PFFile *imageFile;
-@property (strong, nonatomic) PFGeoPoint *coordinate;
+#define CellIdentifier @"CellReuseIdentifier"
 
+@property (strong, nonatomic) PFFile *imageFile;
 @property (strong, nonatomic) UIImageView *imageDisplayView;
 @property (strong, nonatomic) NSArray *events;
 
@@ -30,7 +32,7 @@
 @property (strong, nonatomic) UITableViewCell *tagCell;
 @property (strong, nonatomic) UITableViewCell *captionCell;
 @property (strong, nonatomic) UITableViewCell *uploadCell;
-@property (strong, nonatomic) SZTextView *textField;
+@property (strong, nonatomic) /*SZTextView*/UITextField *textField;
 
 @property (strong, nonatomic) NSString *tag;
 @property (strong, nonatomic) NSString *caption;
@@ -100,21 +102,11 @@
                                              otherButtonTitles:nil];
         [alert show];
         return;
-    } else if (!self.coordinate) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
-                                                           message:@"No location???"
-                                                          delegate:nil
-                                                 cancelButtonTitle:@"OK"
-                                                 otherButtonTitles:nil];
-        [alert show];
-        return;
     }
-    
     PFObject *photo = [PFObject objectWithClassName:kUploadClassKey];
     [photo setObject:self.imageFile forKey:kUploadPhotoKey];
     [photo setObject:caption forKey:kUploadCaptionKey];
     [photo setObject:tag forKey:kUploadTagKey];
-    [photo setObject:self.coordinate forKey:kUploadReadableGeolocationKey];
     
     self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
@@ -128,8 +120,6 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:ImageCaptureDidUploadPhotoNotification object:photo];
             
             [self dismissViewControllerAnimated:YES completion:nil];
-            
-            [(IUUploadViewController *)(self.navigationController.presentingViewController) changeMode];
         } else {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                             message:nil
@@ -143,8 +133,8 @@
 }
 
 - (void)cancelUpload {
-    //[(IUUploadViewController *)(self.navigationController.presentingViewController) changeMode];
-    [self performSelector:@selector(postUploaded:) withObject:self afterDelay:0.0f];
+    //[self performSelector:@selector(postUploaded:) withObject:self afterDelay:0.0f];
+    [self.delegate postUploaded:self];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -205,13 +195,12 @@
 
 #pragma mark - Initialization of View Controller
 
-- (instancetype)initWithImage:(UIImage *)image imageFile:(PFFile *)imageFile coordinate:(PFGeoPoint *)coordinate {
+- (instancetype)initWithImage:(UIImage *)image imageFile:(PFFile *)imageFile {
     self = [super init];
     if (self) {
         // init
         self.image = image;
         self.imageFile = imageFile;
-        self.coordinate = coordinate;
     }
     return self;
 }
@@ -237,9 +226,10 @@
      UI
      ***********/
     
-    self.tableView.scrollEnabled = NO;
+    self.tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:self.view.frame];
     self.tableView.delegate = self;
-    
+    self.tableView.dataSource = self;
+
     self.photoPostBackgroundTaskId = UIBackgroundTaskInvalid;
     
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithWhite:0.1 alpha:0.9];
@@ -254,38 +244,10 @@
     self.cancelButton.tintColor = [UIColor whiteColor];
     self.navigationItem.leftBarButtonItem = self.cancelButton;
     
-    self.imageCell = [[UITableViewCell alloc] init];
-    self.imageDisplayView = [[UIImageView alloc] init];
-    self.imageDisplayView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width);
-    self.imageDisplayView.image = self.image;
-    [self.imageCell addSubview:self.imageDisplayView];
-    
-    self.tagCell = [[UITableViewCell alloc] init];
-    self.tagCell.imageView.image = [UIImage imageNamed:@"tag2"];
-    self.tagCell.textLabel.text = @"Add a tag";
-    self.tagCell.textLabel.font = [UIFont systemFontOfSize:15];
-    self.tagCell.textLabel.textColor = [UIColor blackColor];
-    
-    self.captionCell = [[UITableViewCell alloc] init];
-    self.textField = [[SZTextView alloc] init];
-    self.textField.frame = CGRectInset(self.captionCell.frame, 5, 5);
-    self.textField.center = self.captionCell.center;
-    self.textField.placeholder = @"Add a caption (140 characters maximum)";
-    self.textField.font = [UIFont systemFontOfSize:15];
-    [self.captionCell addSubview:self.textField];
-    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
     self.tap = tap;
-    self.textField.delegate = self;
-    
-    self.uploadCell = [[UITableViewCell alloc] init];
-    self.uploadCell.textLabel.text = @"Upload";
-    self.uploadCell.textLabel.textAlignment = NSTextAlignmentCenter;
-    self.uploadCell.userInteractionEnabled = YES;
-    self.uploadCell.textLabel.textColor = [UIColor whiteColor];
-    self.uploadCell.backgroundColor = [UIColor colorWithRed:0.4 green:0.1 blue:0.5 alpha:0.7];
 }
 
 #pragma mark - UITextViewDelegate
@@ -344,6 +306,50 @@
  */
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     // Configure the cell...
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (!cell) {
+        if (indexPath.row == 0) {
+            
+            self.imageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            /*self.imageDisplayView = [[UIImageView alloc] init];
+            self.imageDisplayView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width);
+            UIImage *croppedImage = [self.image resizedImage:self.imageDisplayView.bounds.size interpolationQuality:kCGInterpolationHigh];
+            self.imageDisplayView.image = croppedImage;
+            [self.imageCell addSubview:self.imageDisplayView];
+             */
+        } else if (indexPath.row == 1) {
+            self.tagCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            self.tagCell.imageView.image = [UIImage imageNamed:@"tag2"];
+            self.tagCell.textLabel.text = @"Add a tag";
+            self.tagCell.textLabel.font = [UIFont systemFontOfSize:15];
+            self.tagCell.textLabel.textColor = [UIColor blackColor];
+        } else if (indexPath.row == 2) {
+            self.captionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            /*
+            self.textField = [[SZTextView alloc] init];
+            self.textField.frame = CGRectInset(self.captionCell.frame, 5, 5);
+            self.textField.center = self.captionCell.center;
+            self.textField.placeholder = @"Add a caption (140 characters maximum)";
+            self.textField.font = [UIFont systemFontOfSize:15];
+            */
+            
+             self.textField = [[UITextField alloc] init];
+             self.textField.frame = CGRectInset(self.captionCell.frame, 5, 5);
+             self.textField.placeholder = @"Add a caption";
+             self.textField.font = [UIFont systemFontOfSize:15];
+            self.textField.delegate = self;
+            [self.captionCell addSubview:self.textField];
+        } else if (indexPath.row == 3) {
+            self.uploadCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            self.uploadCell.textLabel.text = @"Upload";
+            self.uploadCell.textLabel.textAlignment = NSTextAlignmentCenter;
+            self.uploadCell.userInteractionEnabled = YES;
+            self.uploadCell.textLabel.textColor = [UIColor whiteColor];
+            self.uploadCell.backgroundColor = [UIColor colorWithRed:0.4 green:0.1 blue:0.5 alpha:0.7];
+        }
+        
+    }
     if (indexPath.section == 0) {
         switch (indexPath.row) {
             case 0:
@@ -373,8 +379,9 @@
         case 0:
             return self.view.bounds.size.width;
         case 1:
-            return 50;
+            //return 50;
         case 2:
+            /*
             if ([[UIScreen mainScreen] bounds].size.height < 568) {
                 // height of the second cell is variable
                 
@@ -392,6 +399,7 @@
                 self.textField.frame = CGRectInset(frame, 5, 5);
                 return height;
             }
+             */
         case 3:
             return 50;
     }

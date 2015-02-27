@@ -29,6 +29,7 @@ PODS:
   - RKValueTransformers (1.1.1)
   - SOCKit (1.1)
   - SZTextView (1.1.10)
+  - TPKeyboardAvoiding (1.2.6)
   - TransitionKit (2.1.0)
   - VCTransitionsLibrary (1.5.0)
 
@@ -39,6 +40,7 @@ DEPENDENCIES:
   - PKImagePicker
   - RestKit
   - SZTextView
+  - TPKeyboardAvoiding (~> 1.2.6)
   - VCTransitionsLibrary
 
 SPEC CHECKSUMS:
@@ -52,6 +54,7 @@ SPEC CHECKSUMS:
   RKValueTransformers: 67b4ea3eb6a1c1a0b8c3c37eb4e4c05e4febeba2
   SOCKit: d8d0dd3688ae1026c12367570da8fa8e1a6980fb
   SZTextView: 8f1126696c6d54e5f0d672bbecf259ef65b04aeb
+  TPKeyboardAvoiding: 0797ad5f2366e2435e605202b01f3b7cff5d82cd
   TransitionKit: 6a6f3ddda38ae758778aa889dcb930e4f8d64edc
   VCTransitionsLibrary: 3c33ef649f7380bdb5bff5212f01c8f3f9eb5492
 

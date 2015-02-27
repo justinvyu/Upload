@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
+@class IUPostPhotoTableViewController;
+
 /**
  *  Detects when the photo has been either posted or has failed to post to Parse
  */
@@ -22,11 +24,10 @@
 
 @interface IUPostPhotoTableViewController : UITableViewController
 
-- (instancetype)initWithImage:(UIImage *)image imageFile:(PFFile *)imageFile coordinate:(PFGeoPoint *)coordinate;
+- (instancetype)initWithImage:(UIImage *)image imageFile:(PFFile *)imageFile;
 
 @property (strong, nonatomic) UIImage *image;
 
-@property (strong, nonatomic) id<IUPostPhotoTableViewControllerDelegate> delegate;
+@property (weak, nonatomic) id<IUPostPhotoTableViewControllerDelegate> delegate;
 
 @end
-

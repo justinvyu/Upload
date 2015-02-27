@@ -96,6 +96,12 @@
 #define COCOAPODS_VERSION_MINOR_SZTextView 1
 #define COCOAPODS_VERSION_PATCH_SZTextView 10
 
+// TPKeyboardAvoiding
+#define COCOAPODS_POD_AVAILABLE_TPKeyboardAvoiding
+#define COCOAPODS_VERSION_MAJOR_TPKeyboardAvoiding 1
+#define COCOAPODS_VERSION_MINOR_TPKeyboardAvoiding 2
+#define COCOAPODS_VERSION_PATCH_TPKeyboardAvoiding 6
+
 // TransitionKit
 #define COCOAPODS_POD_AVAILABLE_TransitionKit
 #define COCOAPODS_VERSION_MAJOR_TransitionKit 2

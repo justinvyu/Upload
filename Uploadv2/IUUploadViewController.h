@@ -12,7 +12,4 @@
 
 @interface IUUploadViewController : UIViewController
 
-- (instancetype)init;
-- (void)changeMode;
-
 @end

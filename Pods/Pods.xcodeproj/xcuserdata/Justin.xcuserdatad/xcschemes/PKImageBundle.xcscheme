@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "67C2C76A9E76C8987B064431"
+               BlueprintIdentifier = "89E4654476F8FB906ED1BF27"
                BuildableName = "PKImageBundle.bundle"
                BlueprintName = "PKImageBundle"
                ReferencedContainer = "container:Pods.xcodeproj">

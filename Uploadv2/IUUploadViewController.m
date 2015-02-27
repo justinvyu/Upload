@@ -18,25 +18,17 @@
 
 @interface IUUploadViewController () <UITextFieldDelegate, IUPostPhotoTableViewControllerDelegate>
 
-// Before taking
+// UI
 @property (strong, nonatomic) AVCamPreviewView *previewView;
-
 @property (strong, nonatomic) UIButton *captureButton;
 @property (strong, nonatomic) UIButton *flashButton;
-
 @property (strong, nonatomic) UIScrollView *scrollView;
-
-// After taking
 @property (strong, nonatomic) UIImageView *imageDisplayView;
 @property (strong, nonatomic) UIButton *nextButton;
-@property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
-
 @property (strong, nonatomic) UIButton *cancelButton;
 @property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UIView *footerView;
 @property (strong, nonatomic) UIView *subFooterView;
-
-//@property (strong, nonatomic) UITextField *textField;
 
 // AVCaptureSession Management
 @property (strong, nonatomic) AVCaptureSession *session;
@@ -46,12 +38,10 @@
 
 // Image Management
 @property (strong, nonatomic) UIImage *stillImage;
-//@property (strong, nonatomic) UIImage *croppedImage; // ex: 320 x 320
 @property (strong, nonatomic) UIImage *resizedImage; // kImageHeight x kImageHeight, pixels
 
 // For upload
 @property (strong, nonatomic) PFFile *imageFile;
-@property (strong, nonatomic) PFGeoPoint *coordinate;
 
 // Utils
 @property (nonatomic) BOOL deviceAuthorized;
@@ -88,19 +78,9 @@
                  if (!captureImage) {
                      return;
                  }
-
                  self.stillImage = captureImage;
-                 
-                 [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-                     if (error) {
-                         NSLog(@"Unable to get Location");
-                     } else {
-                         self.coordinate = geoPoint;
-                         NSLog(@"Location is Set");
-                     }
-                 }];
-                 
-                 [self changeMode];
+                 [self shouldUploadImage];
+                 [self presentPostPhotoVC];
              }
          }];
     });
@@ -108,7 +88,7 @@
 
 - (void)touchCancelButton {
     // Cancel any ongoing background actions
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)toggleFlash:(UIButton *)sender {
@@ -122,36 +102,16 @@
 
 - (void)presentPostPhotoVC {    
     IUPostPhotoTableViewController *ptvc = [[IUPostPhotoTableViewController alloc] initWithImage:self.resizedImage
-                                                                                       imageFile:self.imageFile
-                                                                                      coordinate:self.coordinate];
+                                                                                       imageFile:self.imageFile];
+    ptvc.delegate = self;
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:ptvc];
     navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:navController animated:YES completion:nil];
 }
 
-- (void)focus:(UIGestureRecognizer *)gesture {
-    
-    CGPoint touchPoint = [gesture locationInView:self.previewView];
-    
-    CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self previewView] layer] captureDevicePointOfInterestForPoint:[gesture locationInView:[gesture view]]];
-    //NSLog(@"%f, %f", touchPoint.x, touchPoint.y);
-    
-    CameraFocusSquareView *camFocus = [[CameraFocusSquareView alloc]initWithFrame:CGRectMake(touchPoint.x-40, touchPoint.y-40, 80, 80)];
-    [camFocus setBackgroundColor:[UIColor clearColor]];
-    [self.previewView addSubview:camFocus];
-    [camFocus setNeedsDisplay];
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:1.5];
-    [camFocus setAlpha:0.0];
-    [UIView commitAnimations];
-    
-    [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
-}
-
 #pragma mark - IUPostPhotoTableViewControllerDelegate
 
-- (void)postUploaded:(IUPostPhotoTableViewController *)sender {
+- (void)postUploaded:(id<IUPostPhotoTableViewControllerDelegate>)sender {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -183,6 +143,26 @@
     });
 }
 
+- (void)focus:(UIGestureRecognizer *)gesture {
+    
+    CGPoint touchPoint = [gesture locationInView:self.previewView];
+    
+    CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self previewView] layer] captureDevicePointOfInterestForPoint:[gesture locationInView:[gesture view]]];
+    //NSLog(@"%f, %f", touchPoint.x, touchPoint.y);
+    
+    CameraFocusSquareView *camFocus = [[CameraFocusSquareView alloc]initWithFrame:CGRectMake(touchPoint.x-40, touchPoint.y-40, 80, 80)];
+    [camFocus setBackgroundColor:[UIColor clearColor]];
+    [self.previewView addSubview:camFocus];
+    [camFocus setNeedsDisplay];
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:1.5];
+    [camFocus setAlpha:0.0];
+    [UIView commitAnimations];
+    
+    [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
+}
+
 #pragma mark - Init
 
 - (instancetype)init {
@@ -209,43 +189,29 @@
     // Create AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     self.session = session;
-    
-    
-    
-    /** CHANGE **/
-    
     // Special config for iPad
     // Keep the default if iPhone
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [self.session setSessionPreset:AVCaptureSessionPresetPhoto];
     }
-    
-    
-    
     self.previewView.session = session;
     
     self.previewView.frame = self.view.frame;
     self.previewView.center = self.view.center;
     
     [self.scrollView addSubview:self.previewView];
-    
     [self checkDeviceAuthorizationStatus];
     
     // Image Display View
-    
     self.imageDisplayView = [[UIImageView alloc] initWithImage:nil];
     self.imageDisplayView.frame = self.scrollView.frame;
     self.imageDisplayView.center = self.scrollView.center;
-    
     [self.scrollView addSubview:self.imageDisplayView];
     
     // Header View and Subviews
-    
     self.headerView = [[UIView alloc] init];
     self.headerView.frame = CGRectMake(0, 0, self.scrollView.bounds.size.width, 44);
     self.headerView.backgroundColor = [UIColor colorWithWhite:0.1f alpha:0.8f];
-    //self.headerView.alpha = 0.8f;
-
     [self.scrollView addSubview:self.headerView];
     
     self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.headerView.frame.origin.x + 10,
@@ -255,7 +221,6 @@
     [self.cancelButton setImage:[UIImage imageNamed:@"PKImageBundle.bundle/Cancel.png"] forState:UIControlStateNormal];
     self.cancelButton.userInteractionEnabled = YES;
     [self.cancelButton addTarget:self action:@selector(touchCancelButton) forControlEvents:UIControlEventTouchUpInside];
-    
     [self.headerView addSubview:self.cancelButton];
     
     self.flashButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -270,87 +235,33 @@
     [self.headerView addSubview:self.flashButton];
      
     // Footer View and Subviews
-    
     self.footerView = [[UIView alloc] init];
-    
     self.footerView.frame = CGRectMake(0,
                                        self.headerView.bounds.size.height + self.scrollView.bounds.size.width,
                                        self.scrollView.bounds.size.width,
                                        self.scrollView.bounds.size.height - (self.headerView.bounds.size.height + self.scrollView.bounds.size.width));
-    
     self.footerView.backgroundColor = [UIColor colorWithWhite:0.1f alpha:0.8f];
     [self.scrollView addSubview:self.footerView];
     
     self.subFooterView = [[UIView alloc] init];
-    
-    
-    
-    
-    /** CHANGE **/
     self.subFooterView.frame = CGRectMake(0, 50,
                                           self.footerView.bounds.size.width,
                                           self.footerView.bounds.size.height - 50);
-    
-    
-    
-    
     self.subFooterView.backgroundColor = [UIColor colorWithWhite:0.1f alpha:1.0f];
     [self.footerView addSubview:self.subFooterView];
     
     self.captureButton = [[UIButton alloc] init];
     CGFloat captureButtonSideLength = 80 > self.footerView.bounds.size.height ? self.footerView.bounds.size.height : 80;
-    
-    //NSLog(@"%f", self.subFooterView.bounds.size.height);
-    
-    
-    
-    /** CHANGE **/
     self.captureButton.frame = CGRectMake((self.view.bounds.size.width / 2) - (captureButtonSideLength / 2),
                                           VIEW_HEIGHT - (self.subFooterView.bounds.size.height / 2) - (captureButtonSideLength / 2),
                                           captureButtonSideLength, captureButtonSideLength);
-    
-    
-    
-    
     [self.captureButton setBackgroundImage:[UIImage imageNamed:@"capture.png"] forState:UIControlStateNormal];
-
     [self.captureButton addTarget:self action:@selector(takeStillImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.captureButton];
     
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    indicator.frame = self.scrollView.frame;
-    indicator.center = self.scrollView.center;
-    self.activityIndicator = indicator;
-    [self.scrollView addSubview:indicator];
-    
     // Tap to Focus
-    
     UITapGestureRecognizer *focus = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(focus:)];
     [self.previewView addGestureRecognizer:focus];
-}
-
-#pragma mark - Change Mode
-
-- (void)changeMode {
-    if (self.captureModeOn) {
-        self.nextButton.hidden = NO;
-        self.cancelButton.hidden = YES;
-        self.captureButton.hidden = YES;
-        self.imageDisplayView.hidden = NO;
-        self.previewView.hidden = YES;
-        self.captureModeOn = NO;
-        self.flashButton.hidden = YES;
-        [self shouldUploadImage];
-    } else {
-        self.flashButton.hidden = NO;
-        self.cancelButton.hidden = NO;
-        self.captureButton.hidden = NO;
-        self.previewView.hidden = NO;
-        self.imageDisplayView.image = nil;
-        self.imageDisplayView.hidden = YES;
-        self.stillImage = nil;
-        self.captureModeOn = YES;
-    }
 }
 
 #pragma mark - Uploading Image File
@@ -364,7 +275,6 @@
  *  @return YES or NO depending on whether or not the image can be uploaded.
  */
 - (BOOL)shouldUploadImage {
-    [self.activityIndicator startAnimating];
     
     CGFloat scaleFactor = (self.stillImage.size.width / self.view.bounds.size.width);
     
@@ -386,6 +296,7 @@
     
     PFFile *imageFile = [PFFile fileWithData:imageData];
     //PFFile *thumbnailImageFile = [PFFile fileWithData:thumbnailImageData];
+    self.imageFile = imageFile;
     
     // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
     self.fileUploadBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
@@ -405,11 +316,8 @@
                 }
             }];
              */
-            self.imageFile = imageFile;
-            [self presentPostPhotoVC];
         } else {
             NSLog(@"Failed");
-            [self.activityIndicator stopAnimating];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                             message:@"Make sure you have internet connection"
@@ -418,7 +326,6 @@
             
         }
         [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
-        [self.activityIndicator stopAnimating];
     }];
     return YES;
 }
