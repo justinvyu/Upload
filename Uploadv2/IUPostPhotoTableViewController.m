@@ -60,12 +60,15 @@
 
 - (IBAction)chooseTag:(id)sender {
     // Create an array of strings you want to show in the picker:
-    
+    /*
     NSMutableArray *eventStrings = [[NSMutableArray alloc] init];
     for (int i = 0; i < [self.events count]; i++) {
         Event *event = (Event *)self.events[i];
         [eventStrings addObject:event.name];
     }
+     */
+    
+    NSArray *eventStrings = @[@"Food", @"Breaking News", @"Event", @"Meeting"];
     
     [ActionSheetStringPicker showPickerWithTitle:@"Select a tag"
                                             rows:eventStrings
@@ -89,7 +92,7 @@
                                               otherButtonTitles:nil];
         [alert show];
         return;
-    } else if (!caption || [caption isEqualToString:@""]) {
+    } /*else if (!caption || [caption isEqualToString:@""]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                         message:@"Make sure that you have added a caption"
                                                        delegate:nil
@@ -97,7 +100,7 @@
                                               otherButtonTitles:nil];
         [alert show];
         return;
-    } else if (!tag || [tag isEqualToString:@""]) {
+    } */else if (!tag || [tag isEqualToString:@""]) {
        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                        message:@"Make sure that you have added a tag"
                                                       delegate:nil
@@ -121,8 +124,8 @@
             NSLog(@"Photo uploaded to Parse");
             
             [[NSNotificationCenter defaultCenter] postNotificationName:ImageCaptureDidUploadPhotoNotification object:photo];
-            
-            [self dismissViewControllerAnimated:YES completion:nil];
+            [self.delegate postUploaded:self];
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
         } else {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload image!"
                                                             message:nil

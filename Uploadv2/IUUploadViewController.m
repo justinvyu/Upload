@@ -109,7 +109,8 @@
 
 #pragma mark - IUPostPhotoTableViewControllerDelegate
 
-- (void)postUploaded:(id<IUPostPhotoTableViewControllerDelegate>)sender {
+- (void)postUploaded:(IUPostPhotoTableViewController *)sender {
+    
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

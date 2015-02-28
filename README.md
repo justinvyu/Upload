@@ -1,15 +1,19 @@
 # Upload
 Photo Uploading Module
 
-SMALL FIXES:
+# Small Fixes
 
-- Fix the event foursquare thing to get events only
-- ~~Flash button disappears forever~~
-- ~~Get rid of "step 2" screen, go directly from 1-3~~
-- Images for cancel button and capture button look weird, might need to get better images
-- ~~Positioning of buttons is still a little weird~~
+- Make the dismiss work
 
-To implement:
+# Changes Needed
+
+This change allows there to be only one camera focus square. This way, if the user clicks the screen multiple times, then there is only one camera focus square.
+
+- Focus Method
+- PWCamFocusSquare ()
+- Add previousCamFocus property
+
+# Implement
 
 ```Objective-C
 - (void)presentCameraVC {
@@ -18,22 +22,4 @@ To implement:
 }
 ```
 
-Files needed:
-```Objective-C
-#import "IUUploadViewController"
-#import "IUPostPhotoViewController"
 
-#import "AVCamPreviewView.h"
-#import "UploadConstants.h"
-#import "UIImage+ResizeAdditions.h"
-#import "IUPostPhotoTableViewController.h"
-#import "CameraFocusSquareView.h"
-#import "Event.h"
-
-#import <Parse/Parse.h>
-#import <AVFoundation/AVFoundation.h>
-
-#import <SZTextView/SZTextView.h>
-#import <ActionSheetPicker-3.0/ActionSheetPicker.h>
-#import <RestKit/RestKit.h>
-```
