@@ -15,12 +15,15 @@
 #import <SZTextView/SZTextView.h>
 #import <ActionSheetPicker-3.0/ActionSheetPicker.h>
 #import <TPKeyboardAvoiding/TPKeyboardAvoidingTableView.h>
+#import <TPKeyboardAvoiding/TPKeyboardAvoidingScrollView.h>
 #import <RestKit/RestKit.h>
 
 @interface IUPostPhotoTableViewController () <UITableViewDelegate, UITextFieldDelegate, UITextViewDelegate>
 
+/*
 #define kFoursquareClientID @"CKYNLQRGVBTFIEZXN1AAQIZHLEJHP03YJPZVIHW2XY323KUV"
 #define kFoursquareSecret @"XLEOBERHEPFCID4CIZ2543F1RO04MGU0IJ1VVRKHIC4ZCHUE"
+*/
 
 #define CellIdentifier @"CellReuseIdentifier"
 
@@ -137,7 +140,7 @@
     [self.delegate postUploaded:self];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
+/*
 - (void)configureRestKit {
     // initialize AFNetworking HTTPClient
     NSURL *baseURL = [NSURL URLWithString:@"https://api.foursquare.com"];
@@ -178,6 +181,7 @@
                                               }];
     
 }
+ */
 
 #pragma mark - Properties
 
@@ -199,6 +203,7 @@
     self = [super init];
     if (self) {
         // init
+        
         self.image = image;
         self.imageFile = imageFile;
     }
@@ -217,19 +222,19 @@
     
     /***********
      RestKit
-     ***********/
+     ***********
     
     [self configureRestKit];
     [self loadEvents];
+     
+     */
     
     /***********
      UI
      ***********/
-    
-    self.tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:self.view.frame];
+        
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-
     self.photoPostBackgroundTaskId = UIBackgroundTaskInvalid;
     
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithWhite:0.1 alpha:0.9];
@@ -312,12 +317,12 @@
         if (indexPath.row == 0) {
             
             self.imageCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-            /*self.imageDisplayView = [[UIImageView alloc] init];
+            self.imageDisplayView = [[UIImageView alloc] init];
             self.imageDisplayView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width);
             UIImage *croppedImage = [self.image resizedImage:self.imageDisplayView.bounds.size interpolationQuality:kCGInterpolationHigh];
             self.imageDisplayView.image = croppedImage;
             [self.imageCell addSubview:self.imageDisplayView];
-             */
+             
         } else if (indexPath.row == 1) {
             self.tagCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             self.tagCell.imageView.image = [UIImage imageNamed:@"tag2"];
@@ -328,17 +333,16 @@
             self.captionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             /*
             self.textField = [[SZTextView alloc] init];
-            self.textField.frame = CGRectInset(self.captionCell.frame, 5, 5);
             self.textField.center = self.captionCell.center;
             self.textField.placeholder = @"Add a caption (140 characters maximum)";
             self.textField.font = [UIFont systemFontOfSize:15];
             */
             
-             self.textField = [[UITextField alloc] init];
-             self.textField.frame = CGRectInset(self.captionCell.frame, 5, 5);
-             self.textField.placeholder = @"Add a caption";
-             self.textField.font = [UIFont systemFontOfSize:15];
-            self.textField.delegate = self;
+            self.textField = [[UITextField alloc] init];
+            self.textField.frame = self.captionCell.frame; //CGRectInset(self.captionCell.frame, 5, 5);
+            self.textField.placeholder = @"Add a caption";
+            self.textField.font = [UIFont systemFontOfSize:15];
+            self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
             [self.captionCell addSubview:self.textField];
         } else if (indexPath.row == 3) {
             self.uploadCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
@@ -363,6 +367,7 @@
         }
     }
     return nil;
+    
 }
 
 /**
@@ -374,36 +379,13 @@
  *
  *  @return This returns a CGFloat value of the height for the cell.
  */
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.row) {
         case 0:
             return self.view.bounds.size.width;
-        case 1:
-            //return 50;
-        case 2:
-            /*
-            if ([[UIScreen mainScreen] bounds].size.height < 568) {
-                // height of the second cell is variable
-                
-                // To calculate, subtract the screen height by 50 (because there is another cell that is always 50
-                // tall and then subtract the screen's width (cell index 0's height) and the navigation bar's height since
-                // that must also be accounted for.
-                CGFloat height = self.view.bounds.size.height - 50 - self.view.bounds.size.width - self.navigationController.navigationBar.bounds.size.height;
-                CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, height);
-                self.textField.frame = CGRectInset(frame, 5, 5);
-                return height;
-            } else {
-                // Same calculation for the iPhone 5+, but subtracting 100 since there is another 50 tall upload button.
-                CGFloat height = self.view.bounds.size.height - 100 - self.view.bounds.size.width - self.navigationController.navigationBar.bounds.size.height;
-                CGRect frame = CGRectMake(0, 0, self.view.bounds.size.width, height);
-                self.textField.frame = CGRectInset(frame, 5, 5);
-                return height;
-            }
-             */
-        case 3:
-            return 50;
     }
-    return 44;
+    return 50;
 }
 
 #pragma mark - UITableViewDelegate

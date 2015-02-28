@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+const float squareLength = 60.0f;
+
 @interface CameraFocusSquareView : UIView
+
 
 @end
 

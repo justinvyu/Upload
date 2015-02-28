@@ -24,11 +24,11 @@
 @property (strong, nonatomic) UIButton *flashButton;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIImageView *imageDisplayView;
-@property (strong, nonatomic) UIButton *nextButton;
 @property (strong, nonatomic) UIButton *cancelButton;
 @property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UIView *footerView;
 @property (strong, nonatomic) UIView *subFooterView;
+@property (strong, nonatomic) CameraFocusSquareView *previousCamFocus;
 
 // AVCaptureSession Management
 @property (strong, nonatomic) AVCaptureSession *session;
@@ -46,8 +46,6 @@
 // Utils
 @property (nonatomic) BOOL deviceAuthorized;
 @property (nonatomic) BOOL flashOn;
-@property (nonatomic) BOOL captureModeOn;
-@property (nonatomic) BOOL locked;
 
 // Background Task ID
 @property (nonatomic) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
@@ -150,9 +148,12 @@
     CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self previewView] layer] captureDevicePointOfInterestForPoint:[gesture locationInView:[gesture view]]];
     //NSLog(@"%f, %f", touchPoint.x, touchPoint.y);
     
-    CameraFocusSquareView *camFocus = [[CameraFocusSquareView alloc]initWithFrame:CGRectMake(touchPoint.x-40, touchPoint.y-40, 80, 80)];
+    [self.previousCamFocus removeFromSuperview];
+    CGRect focusRect = CGRectMake(touchPoint.x-(squareLength / 2), touchPoint.y-(squareLength / 2), squareLength, squareLength);
+    CameraFocusSquareView *camFocus = [[CameraFocusSquareView alloc]initWithFrame:focusRect];
     [camFocus setBackgroundColor:[UIColor clearColor]];
     [self.previewView addSubview:camFocus];
+    self.previousCamFocus = camFocus;
     [camFocus setNeedsDisplay];
     
     [UIView beginAnimations:nil context:NULL];
@@ -398,12 +399,7 @@
     
     [self setupUI];
     
-    self.nextButton.hidden = YES;
-    
-    self.captureModeOn = YES;
-    self.flashOn = NO;
-    self.locked = NO;
-    
+    self.flashOn = NO;    
     self.imageDisplayView.hidden = YES;
     self.imageDisplayView.userInteractionEnabled = NO;
     

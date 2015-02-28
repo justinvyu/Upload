@@ -9,8 +9,6 @@
 #import "CameraFocusSquareView.h"
 #import <QuartzCore/QuartzCore.h>
 
-const float squareLength = 80.0f;
-
 @implementation CameraFocusSquareView
 
 - (id)initWithFrame:(CGRect)frame {
@@ -21,12 +19,12 @@ const float squareLength = 80.0f;
         [self setBackgroundColor:[UIColor clearColor]];
         [self.layer setBorderWidth:2.0];
         //[self.layer setCornerRadius:4.0];
-        [self.layer setBorderColor:[UIColor whiteColor].CGColor];
+        [self.layer setBorderColor:[UIColor yellowColor].CGColor];
         
         CABasicAnimation *selectionAnimation = [CABasicAnimation
                                                 animationWithKeyPath:@"borderColor"];
-        selectionAnimation.toValue = (id)[UIColor purpleColor].CGColor;
-        selectionAnimation.repeatCount = 2;
+        selectionAnimation.toValue = (id)[UIColor yellowColor].CGColor;
+        selectionAnimation.repeatCount = 1;
         [self.layer addAnimation:selectionAnimation
                           forKey:@"selectionAnimation"];
         
