@@ -21,5 +21,3 @@ This change allows there to be only one camera focus square. This way, if the us
 	[self presentViewController:uvc animated:YES completion:nil];
 }
 ```
-
-
